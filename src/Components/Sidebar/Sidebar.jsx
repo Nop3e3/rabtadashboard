@@ -27,7 +27,7 @@ const Icon = ({ src }) => (
 const Sidebar = () => {
   const menuItems = [
     { name: 'Dashboard', path: '/', icon: dashboardIcon },
-    { name: 'App Content', path: '/content', icon: contentIcon },
+    { name: 'App Content', path: '/AppContentHome', icon: contentIcon },
     { name: 'Suppliers', path: '/suppliers', icon: suppliersIcon },
     { name: 'Learning', path: '/learning', icon: learningIcon },
     { name: 'Community', path: '/community', icon: communityIcon },
