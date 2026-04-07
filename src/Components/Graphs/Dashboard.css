@@ -1,0 +1,164 @@
+/* Import the specific font from Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Lexend+Exa:wght@300;400;500;600&display=swap');
+
+:root {
+  --bg-color: #0c0c0e;
+  --card-bg: #16161a;
+  --text-main: #ffffff;
+  --text-muted: #8a8a8e;
+  --accent-yellow: #e2e873;
+  --accent-blue: #1d4ed8;
+  --accent-green: #84cc16;
+  --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+
+
+
+.rowy{
+  display: flex;
+  flex-direction: row;
+  gap:20px;
+  width: 100%
+}
+/* Dashboard Layout Grid */
+.dashboard-wrapper {
+  display: flex;
+flex-direction: column;
+  gap: 24px;
+width: 100%;
+
+  color: var(--text-main);
+  font-family: 'Lexend Exa', sans-serif;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+/* Individual Card Styling */
+.graph-card {
+background: linear-gradient(0deg, #141414 -51.88%, #2C2A32 100%);
+
+
+  border-radius: 28px;
+  padding: 32px;
+  width: 100%;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.03);
+  display: flex;
+  flex-direction: column;
+  min-height: 420px;
+  transition: var(--transition);
+}
+
+.graph-card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(226, 232, 115, 0.1);
+}
+
+/* Header & Typography */
+.graph-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+}
+
+.graph-title {
+  font-size: 1.1rem;
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  margin: 0;
+}
+
+/* Toggle Switch Styling */
+.toggle-pill {
+  background: #252529;
+  padding: 4px;
+  border-radius: 14px;
+  display: flex;
+  gap: 4px;
+}
+
+.toggle-item {
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  padding: 8px 16px;
+  border-radius: 10px;
+  font-family: 'Lexend Exa', sans-serif;
+  font-size: 0.75rem;
+  font-weight: 400;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.toggle-item.active {
+  background: var(--accent-yellow);
+  color: #000;
+  font-weight: 500;
+}
+
+/* Recharts Customization overrides */
+.recharts-cartesian-grid-line {
+  stroke-opacity: 0.1;
+}
+
+.recharts-text {
+  font-family: 'Lexend Exa', sans-serif !important;
+  font-weight: 300;
+}
+
+/* Tooltip Styling */
+.recharts-default-tooltip {
+  background-color: var(--card-bg) !important;
+  border: 1px solid rgba(255,255,255,0.1) !important;
+  border-radius: 12px !important;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.4) !important;
+}
+
+
+
+/* Activity Feed specific styles */
+.activity-item {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 4px 0;
+}
+
+.activity-icon {
+  background: rgba(226, 232, 115, 0.1);
+  color: var(--accent-yellow);
+  padding: 30px;
+  border-radius: 14px;
+  display: flex;
+  width:32px;
+  height: 32px;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 600px) {
+  .dashboard-wrapper {
+    grid-template-columns: 1fr;
+    padding: 10px;
+  }
+  
+  .graph-card {
+    padding: 20px;
+    min-height: 350px;
+  }
+  
+  .graph-title {
+    font-size: 0.95rem;
+  }
+}
+
+
+
+
+.graph-card {
+  flex: 0 0 calc(50% - 10px);  /* 10px = half of gap: 20px */
+  /* remove width: 50% */
+}

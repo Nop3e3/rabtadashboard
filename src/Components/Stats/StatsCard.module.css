@@ -1,0 +1,347 @@
+/* src/index.css */
+@import url('https://fonts.googleapis.com/css2?family=Lexend+Exa:wght@400;500;600&display=swap');
+
+:root {
+  /* Colors - based on image_0.png */
+  --bg-color-main: #000000;
+  --bg-color-card: #1c1c1e;
+  --bg-color-icon: #2c2c2e;
+  --text-color-primary: #ffffff;
+  --text-color-secondary: #a1a1a6;
+  --text-color-trend-positive: #34c759;
+  --text-color-trend-negative: #ff3b30; /* For future use */
+  --icon-color: #ffd60a;
+
+  /* Typography */
+  --font-family: 'Lexend Exa', sans-serif;
+  --font-size-base: 16px;
+
+  /* Spacing and Borders */
+  --card-border-radius: 16px;
+  --icon-border-radius: 12px;
+  --card-padding: 24px;
+}
+
+
+/* Base font-size management */
+html {
+  font-size: var(--font-size-base);
+}
+
+@media (max-width: 768px) {
+  html {
+    font-size: 14px;
+  }
+}
+.cardContainer {
+  background-color: var(--bg-color-card);
+  border-radius: var(--card-border-radius);
+  padding: var(--card-padding);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5); /* Subtle depth like the source */
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  height: 100%; /* Important for card grid alignment */
+}
+
+/* Add a hover effect for a modern interactive feel */
+.cardContainer:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.7);
+}
+
+.topRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 20px; /* Space above trend */
+}
+
+.textStack {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  padding-right: 16px;
+}
+
+.title {
+  margin: 0;
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--text-color-secondary);
+  letter-spacing: 0.05em;
+  line-height: 1.2;
+}
+
+.mainValueContainer {
+  display: flex;
+  align-items: baseline;
+  gap: 8px; /* For potential future currency symbol, etc. */
+}
+
+.value {
+  margin: 10px 0 0 0;
+  font-size: 1.8rem;
+  font-weight: 600;
+  color: var(--text-color-primary);
+  letter-spacing: -0.01em;
+  line-height: 1.1;
+}
+
+.additionalText {
+  color: var(--text-color-secondary);
+  font-size: 1rem;
+  margin-left: 4px;
+}
+
+.iconContainer {
+  flex-shrink: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 48px;
+  height: 48px;
+  background-color: var(--bg-color-icon);
+  border-radius: var(--icon-border-radius);
+}
+
+/* Trend text styles */
+.trendContainer {
+  font-size: 0.9rem;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+}
+
+.positiveTrend {
+  color: var(--text-color-trend-positive);
+}
+
+.negativeTrend {
+  color: var(--text-color-trend-negative);
+}
+
+/* Responsiveness adjustments within the card */
+@media (max-width: 600px) {
+  .cardContainer {
+    padding: 20px;
+  }
+  .value {
+    font-size: 1.6rem;
+  }
+  .title {
+    font-size: 0.8rem;
+  }
+}
+
+
+
+/* src/components/StatsSection/StatsSection.module.css */
+
+.statsSection {
+  width: 100%;
+  padding: 40px 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.sectionInnerContainer {
+  /* Restrict overall container width for better readability */
+  max-width: 1200px; 
+  width: 100%;
+  padding: 0 20px; /* Side padding for smaller screens */
+
+  /* Create a responsive grid */
+  display: grid;
+  grid-template-columns: repeat(4, 1fr); /* 4 columns for desktop */
+  gap: 24px; /* Space between cards */
+}
+
+/* Ensure cards handle sizing correctly */
+.cardWrapper {
+  display: flex;
+}
+
+/* Responsiveness break points for the section grid */
+
+/* Large Tablet / Smaller desktop (4 -> 2) */
+@media (max-width: 1024px) {
+  .sectionInnerContainer {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+  }
+}
+
+/* Small tablet / Large Mobile (2 -> 1) */
+@media (max-width: 600px) {
+  .sectionInnerContainer {
+    grid-template-columns: 1fr;
+    gap: 16px;
+    padding: 0 16px; /* Slightly tighter padding on mobile */
+  }
+}
+
+
+
+
+
+
+
+
+/* ───── Section Wrapper ───── */
+.statsSection {
+  width: 100%;
+  padding: 24px 32px;
+  padding-left: 0px;
+padding-right:0px;
+  box-sizing: border-box;
+}
+
+/* ───── Grid Container ───── */
+.sectionInnerContainer {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr); /* 4 equal columns on desktop */
+  gap: 20px;
+  width: 100%;
+}
+
+/* ───── Each Card Wrapper ───── */
+.cardWrapper {
+  width: 100%;
+  min-width: 0; /* prevents overflow in grid */
+}
+
+/* ───── Responsive Breakpoints ───── */
+
+/* Large tablets / small desktops */
+@media (max-width: 1100px) {
+  .sectionInnerContainer {
+    grid-template-columns: repeat(2, 1fr); /* 2 columns */
+  }
+}
+
+/* Tablets */
+@media (max-width: 700px) {
+  .statsSection {
+    padding: 16px;
+  }
+
+  .sectionInnerContainer {
+    grid-template-columns: repeat(2, 1fr); /* still 2 columns */
+    gap: 12px;
+  }
+}
+
+/* Mobile */
+@media (max-width: 480px) {
+  .sectionInnerContainer {
+    grid-template-columns: 1fr; /* single column */
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+.cardContainer {
+  width: 100%;          /* ✅ fills the grid cell */
+  box-sizing: border-box;
+  padding: 20px;
+  border-radius: 12px;
+background: linear-gradient(0deg, #141414 -51.88%, #2C2A32 100%);
+
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.07);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.topRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.textStack {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  flex: 1;
+  min-width: 0; /* prevents text overflow */
+}
+
+.title {
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: #6b7280;
+  margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.mainValueContainer {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+}
+
+.value {
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: #ffffff;
+  margin: 0;
+}
+
+.additionalText {
+  font-size: 0.8rem;
+  color: #9ca3af;
+}
+
+.iconContainer {
+  flex-shrink: 0;
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10px;
+  background: rgba(255, 200, 0, 0.1); /* light yellow tint for your yellow icons */
+}
+
+.iconContainer img {
+  width: 26px;
+  height: 26px;
+  object-fit: contain;
+}
+
+.trendContainer {
+  font-size: 0.82rem;
+  font-weight: 600;
+  padding: 4px 8px;
+  border-radius: 6px;
+  display: inline-block;
+  width: fit-content;
+}
+
+.positiveTrend {
+color: #B6F193;
+
+
+  background: #b5f1932d;
+}
+
+.negativeTrend {
+  color: #dc2626;
+  background: #fee2e2;
+}

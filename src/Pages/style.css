@@ -1,5 +1,20 @@
+.homepage_bg {
+  display: flex;
+  flex-direction: row;
+  margin: 0px;
+  
+  width: 100%;
+}
 
-body{
-    margin: 0px;
-       background: #1E1E1E;
+body {
+  margin: 0px;
+  padding: 0px;
+  background: #1E1E1E;
+}
+
+.maincon {
+  margin-left: 312px; /* 280px sidebar + 16px sidebar margin-left + 16px gap */
+  width: calc(100% - 312px);
+  min-height: 100vh;
+  
 }
