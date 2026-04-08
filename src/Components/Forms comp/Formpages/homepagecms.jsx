@@ -1,15 +1,15 @@
 import { useState, useRef, useEffect } from "react";
-import "./Form.css";
+import "../Form.css";
 
-import { supabase } from "../../Pages/Supabase.jsx";
+import { supabase } from "../../../Pages/Supabase.jsx";
 
-import LanguageToggleSection from "./Languagetogglesection .jsx";
-import GreetingSection       from "./Greetingsection.jsx";
-import UserNameSection       from "./Usernamesection.jsx";
-import WalletSection         from "./Walletsection.jsx";
-import ContentSection        from "./Contentsection.jsx";
-import QuickActionsSection   from "./Quickactionssection.jsx";
-import FormFooter            from "./Formfooter.jsx";
+import LanguageToggleSection from "../Languagetogglesection .jsx";
+import GreetingSection       from "../Greetingsection.jsx";
+import UserNameSection       from "../Usernamesection.jsx";
+import WalletSection         from "../Walletsection.jsx";
+import ContentSection        from "../Contentsection.jsx";
+import QuickActionsSection   from "../Quickactionssection.jsx";
+import FormFooter            from "../Formfooter.jsx";
 
 const LANG_OPTIONS = [
   { value: "en", label: "English",          dir: "ltr" },

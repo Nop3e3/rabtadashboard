@@ -2,7 +2,7 @@
 import React from "react";
 import Sidebar from "../Components/Sidebar/Sidebar";
 import "./style.css";
-import Supplierform from "../Components/Forms comp/Supplierdiscoveryform"; // Import the reusable form page
+import Supplierform from "../Components/Forms comp/Formpages/Supplierdiscoveryform"; // Import the reusable form page
 import Chips from "../Components/Chips/Chipcon";
 
 const Home = () => {

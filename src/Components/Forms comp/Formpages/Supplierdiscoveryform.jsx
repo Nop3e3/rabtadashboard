@@ -1,13 +1,13 @@
 // SearchSectionEditorPage.jsx
 
 import { useState, useRef, useEffect } from "react";
-import "./Form.css";
+import "../Form.css";
 
-import { supabase }          from "../../Pages/Supabase.jsx";
-import LanguageToggleSection from "./Languagetogglesection .jsx";
-import GreetingSection       from "./Greetingsection.jsx";
-import DynamicListSection    from "./Dynamiclistsection.jsx";
-import FormFooter            from "./Formfooter.jsx";
+import { supabase }          from "../../../Pages/Supabase.jsx";
+import LanguageToggleSection from "../Languagetogglesection .jsx";
+import GreetingSection       from "../Greetingsection.jsx";
+import DynamicListSection    from "../Dynamiclistsection.jsx";
+import FormFooter            from "../Formfooter.jsx";
 
 // ── Table name — has a space and apostrophe so must be quoted in Supabase ────
 const TABLE = "supplier's page discovery";

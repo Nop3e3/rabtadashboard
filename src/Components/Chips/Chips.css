@@ -23,13 +23,14 @@
 .chip:active { transform: scale(0.97); }
 
 .chip--active {
-  background: linear-gradient(135deg, #d4e86e 0%, #c5d95a 100%);
+background: linear-gradient(180deg, #EDFE8E 0%, #8E9855 100%);
   color: #1a2000;
   font-weight: 500;
 }
 
 .chip--active:hover {
-  background: linear-gradient(135deg, #daf070 0%, #cce060 100%);
+background: linear-gradient(180deg, #EDFE8E 0%, #8E9855 100%);
+
 }
 .nav-chips-container {
     margin-top: 20px;
