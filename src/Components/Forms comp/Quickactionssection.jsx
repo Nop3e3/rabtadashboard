@@ -1,29 +1,32 @@
-// components/QuickActionsSection.jsx
-// Quick actions list card — group header, sortable rows, add/delete, modal trigger.
-// Owns items state, group name state, modal open state, and toast visibility.
-// Props:
-//   sectionTitle      string
-//   addLabel          string        — pill button label (header)
-//   addRowLabel       string        — inline row button label (bottom of list)
-//   groupPlaceholder  string        — placeholder for the group name input
-//   emptyText         string        — shown when the list is empty
-//   lang              "en"|"ar"     — controls which title field is displayed in rows
-//   defaultItems      array         — [{title, titleAr, preview, time}]
-//   onCommit          fn(items)     — fires after every add/delete
-//   toastText         string        — success toast message after add
-//   modal             object        — all props forwarded verbatim to QuickActionModal
+// QuickActionsSection.jsx
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import QuickActionModal from "./QuickActionModal.jsx";
 
 export default function QuickActionsSection({
-  sectionTitle, addLabel, addRowLabel, groupPlaceholder, emptyText,
-  lang, defaultItems, onCommit, toastText, modal,
+  sectionTitle,
+  addLabel,
+  addRowLabel,
+  groupPlaceholder,
+  emptyText,
+  lang,
+  defaultItems,
+  onCommit,
+  toastText,
+  modal,
 }) {
-  const [items,    setItems]    = useState(defaultItems ?? []);
-  const [grpName,  setGrpName]  = useState("");
+  const [items,     setItems]     = useState(defaultItems ?? []);
+  const [grpName,   setGrpName]   = useState("");
   const [modalOpen, setModalOpen] = useState(false);
-  const [toast,    setToast]    = useState(false);
+  const [toast,     setToast]     = useState(false);
+
+  // Sync + fire onCommit when DB data arrives
+  useEffect(() => {
+    if (defaultItems && defaultItems.length > 0) {
+      setItems(defaultItems);
+      onCommit?.(defaultItems);
+    }
+  }, [defaultItems]);
 
   const addItem = item => {
     const next = [...items, item];
@@ -43,7 +46,6 @@ export default function QuickActionsSection({
   return (
     <div className="card">
 
-      {/* Section header */}
       <div className="s-hd">
         <span className="s-title">{sectionTitle}</span>
         <button className="btn-add-pill" onClick={() => setModalOpen(true)}>
@@ -51,10 +53,8 @@ export default function QuickActionsSection({
         </button>
       </div>
 
-      {/* Group container */}
       <div className="qa-grp">
 
-        {/* Group header row */}
         <div className="qa-grp-hd">
           <span className="drag">⠿</span>
           <input
@@ -66,39 +66,44 @@ export default function QuickActionsSection({
           <button className="del" title="Delete group">🗑</button>
         </div>
 
-        {/* Empty state */}
         {items.length === 0 && (
           <div className="qa-empty">{emptyText}</div>
         )}
 
-        {/* Item rows */}
         {items.map((item, i) => (
           <div className="qa-row" key={i}>
             <span className="drag" style={{ fontSize: 10 }}>⠿</span>
 
             {item.preview
-              ? <img  className="qa-thumb"    src={item.preview} alt={item.title} />
-              : <div  className="qa-thumb-ph">SVG</div>
+              ? <img className="qa-thumb" src={item.preview} alt={item.title} />
+              : <div className="qa-thumb-ph">IMG</div>
             }
 
-            <span className="qa-name">
-              {lang === "ar" ? item.titleAr : item.title}
-            </span>
+            <div style={{ flex: 1, minWidth: 0, display: "flex", flexDirection: "column", gap: 1 }}>
+              <span className="qa-name">{item.title}</span>
+              {item.caption && (
+                <span style={{ fontSize: 9.5, color: "var(--text-3)", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+                  {item.caption}
+                </span>
+              )}
+            </div>
 
-            <span className="qa-time">{item.time}</span>
+            {item.path && (
+              <span style={{ fontSize: 9, color: "var(--text-3)", fontFamily: "monospace", maxWidth: 80, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", flexShrink: 0 }}>
+                {item.path}
+              </span>
+            )}
 
             <button className="del" onClick={() => deleteItem(i)}>🗑</button>
           </div>
         ))}
 
-        {/* Inline add button */}
         <button className="btn-add-inline" onClick={() => setModalOpen(true)}>
           + {addRowLabel}
         </button>
 
       </div>
 
-      {/* Modal */}
       <QuickActionModal
         open={modalOpen}
         onClose={() => setModalOpen(false)}
@@ -106,7 +111,6 @@ export default function QuickActionsSection({
         {...modal}
       />
 
-      {/* Success toast */}
       {toast && <div className="toast">{toastText}</div>}
 
     </div>

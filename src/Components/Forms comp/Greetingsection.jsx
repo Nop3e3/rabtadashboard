@@ -1,17 +1,6 @@
-// components/GreetingSection.jsx
-// Editable greeting text input (e.g. "Good Morning").
-// Owns its own value state and inline validation.
-// Props:
-//   label          string        — card + field label
-//   placeholder    string
-//   maxLength      number
-//   required       bool
-//   dir            "ltr"|"rtl"
-//   defaultValue   string        — initial value
-//   onCommit       fn({greeting: string})  — fires on every change
-//   externalError  string|null   — error injected from parent (e.g. on Save click)
+// GreetingSection.jsx
 
-import { useState, useCallback } from "react";
+import { useState, useEffect, useCallback } from "react";
 import Field     from "./Field.jsx";
 import TextInput from "./TextInput.jsx";
 
@@ -21,6 +10,15 @@ export default function GreetingSection({
 }) {
   const [val, setVal] = useState(defaultValue ?? "");
   const [err, setErr] = useState(null);
+
+  // When defaultValue arrives from DB — update local state AND fire onCommit
+  // so data.current in the page is always in sync
+  useEffect(() => {
+    if (defaultValue !== undefined && defaultValue !== null) {
+      setVal(defaultValue);
+      onCommit?.({ greeting: defaultValue });
+    }
+  }, [defaultValue]);
 
   const validate = useCallback(v => {
     if (required && !v.trim()) return "Greeting text is required.";
@@ -41,14 +39,7 @@ export default function GreetingSection({
       <div className="s-hd">
         <span className="s-title">{label}</span>
       </div>
-
-      <Field
-        label={label}
-        required={required}
-        error={activeError}
-        maxLen={maxLength}
-        len={val.length}
-      >
+      <Field label={label} required={required} error={activeError} maxLen={maxLength} len={val.length}>
         <TextInput
           value={val}
           onChange={handleChange}

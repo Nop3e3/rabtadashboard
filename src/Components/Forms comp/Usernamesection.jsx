@@ -1,30 +1,36 @@
-// components/UserNameSection.jsx
-// Editable user name display text (e.g. "Welcome Back, {user}").
-// Owns its own value state and inline validation.
-// Props:
-//   label          string
-//   hint           string        — helper text beneath label
-//   placeholder    string
-//   maxLength      number
-//   required       bool
-//   dir            "ltr"|"rtl"
-//   defaultValue   string
-//   onCommit       fn({userName: string})
-//   externalError  string|null
+// UserNameSection.jsx
 
-import { useState, useCallback } from "react";
+import { useState, useEffect, useCallback } from "react";
 import Field     from "./Field.jsx";
 import TextInput from "./TextInput.jsx";
 
 export default function UserNameSection({
   label, hint, placeholder, maxLength, required, dir,
   defaultValue, onCommit, externalError,
+  extraLabel, extraPlaceholder, extraMaxLength, extraDefaultValue, onExtraCommit,
 }) {
-  const [val, setVal] = useState(defaultValue ?? "");
-  const [err, setErr] = useState(null);
+  const [val,      setVal]      = useState(defaultValue      ?? "");
+  const [extraVal, setExtraVal] = useState(extraDefaultValue ?? "");
+  const [err,      setErr]      = useState(null);
+
+  // Sync name + fire onCommit when DB data arrives
+  useEffect(() => {
+    if (defaultValue !== undefined && defaultValue !== null) {
+      setVal(defaultValue);
+      onCommit?.({ userName: defaultValue });
+    }
+  }, [defaultValue]);
+
+  // Sync username + fire onExtraCommit when DB data arrives
+  useEffect(() => {
+    if (extraDefaultValue !== undefined && extraDefaultValue !== null) {
+      setExtraVal(extraDefaultValue);
+      onExtraCommit?.(extraDefaultValue);
+    }
+  }, [extraDefaultValue]);
 
   const validate = useCallback(v => {
-    if (required && !v.trim()) return "User name display text is required.";
+    if (required && !v.trim()) return "Name is required.";
     return null;
   }, [required]);
 
@@ -32,6 +38,11 @@ export default function UserNameSection({
     setVal(v);
     setErr(validate(v));
     onCommit?.({ userName: v });
+  };
+
+  const handleExtra = v => {
+    setExtraVal(v);
+    onExtraCommit?.(v);
   };
 
   const activeError = externalError ?? err;
@@ -42,14 +53,7 @@ export default function UserNameSection({
         <span className="s-title">{label}</span>
       </div>
 
-      <Field
-        label={label}
-        required={required}
-        hint={hint}
-        error={activeError}
-        maxLen={maxLength}
-        len={val.length}
-      >
+      <Field label={label} required={required} hint={hint} error={activeError} maxLen={maxLength} len={val.length}>
         <TextInput
           value={val}
           onChange={handleChange}
@@ -59,6 +63,18 @@ export default function UserNameSection({
           dir={dir}
         />
       </Field>
+
+      {extraLabel && (
+        <Field label={extraLabel} maxLen={extraMaxLength} len={extraVal.length}>
+          <TextInput
+            value={extraVal}
+            onChange={handleExtra}
+            placeholder={extraPlaceholder}
+            maxLength={extraMaxLength}
+            dir={dir}
+          />
+        </Field>
+      )}
     </div>
   );
 }

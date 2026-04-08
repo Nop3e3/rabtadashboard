@@ -1,45 +1,54 @@
 // QuickActionModal.jsx
-// Modal for adding a Quick Action — drag-and-drop image upload + bilingual title fields.
-// Owns all internal form state and per-field validation.
-// Props:
-//   open           bool
-//   onClose        fn
-//   onSave         fn(item)     — called with {title, titleAr, preview, time}
-//   title          string
-//   uploadLabel    string
-//   uploadPrompt   string
-//   uploadSub      string
-//   uploadHint     string
-//   enLabel        string
-//   enPh           string
-//   enMax          number
-//   arLabel        string
-//   arPh           string
-//   arMax          number
-//   cancelLabel    string
-//   saveLabel      string
-//   errMsg         object  — { image, imageType, imageSize, en, ar, minLen }
 
 import { useState, useRef, useEffect } from "react";
 import Field     from "./Field.jsx";
 import TextInput from "./TextInput.jsx";
 
 export default function QuickActionModal({
-  open, onClose, onSave,
-  title, uploadLabel, uploadPrompt, uploadSub, uploadHint,
-  enLabel, enPh, enMax,
-  arLabel, arPh, arMax,
-  cancelLabel, saveLabel,
+  open,
+  onClose,
+  onSave,
+  // modal heading
+  title,
+  // image field
+  uploadLabel,
+  uploadPrompt,
+  uploadSub,
+  uploadHint,
+  // title field
+  titleLabel,
+  titlePh,
+  titleMax,
+  // caption field
+  captionLabel,
+  captionPh,
+  captionMax,
+  // button field
+  buttonLabel,
+  buttonPh,
+  buttonMax,
+  // path field
+  pathLabel,
+  pathPh,
+  pathMax,
+  // footer
+  cancelLabel,
+  saveLabel,
+  // validation messages
   errMsg,
 }) {
   const fileRef = useRef(null);
-  const [form, setForm] = useState({ en: "", ar: "", file: null, preview: null });
+
+  const EMPTY = { title: "", caption: "", button: "", path: "", file: null, preview: null };
+
+  const [form, setForm] = useState(EMPTY);
   const [errs, setErrs] = useState({});
   const [drag, setDrag] = useState(false);
 
+  // Reset form every time modal opens
   useEffect(() => {
-    if (!open) {
-      setForm({ en: "", ar: "", file: null, preview: null });
+    if (open) {
+      setForm(EMPTY);
       setErrs({});
     }
   }, [open]);
@@ -51,8 +60,14 @@ export default function QuickActionModal({
 
   const handleFile = file => {
     if (!file) return;
-    if (!file.type.startsWith("image/")) { setErrs(p => ({ ...p, img: errMsg.imageType })); return; }
-    if (file.size > 5 * 1024 * 1024)    { setErrs(p => ({ ...p, img: errMsg.imageSize })); return; }
+    if (!file.type.startsWith("image/")) {
+      setErrs(p => ({ ...p, img: errMsg?.imageType ?? "Invalid file type." }));
+      return;
+    }
+    if (file.size > 5 * 1024 * 1024) {
+      setErrs(p => ({ ...p, img: errMsg?.imageSize ?? "File too large." }));
+      return;
+    }
     set("file",    file);
     set("preview", URL.createObjectURL(file));
     clr("img");
@@ -60,22 +75,26 @@ export default function QuickActionModal({
 
   const validate = () => {
     const e = {};
-    if (!form.file)                     e.img = errMsg.image;
-    if (!form.en.trim())                e.en  = errMsg.en;
-    else if (form.en.trim().length < 2) e.en  = errMsg.minLen;
-    if (!form.ar.trim())                e.ar  = errMsg.ar;
-    else if (form.ar.trim().length < 2) e.ar  = errMsg.minLen;
+    // Image is optional — only validate title
+    if (!form.title.trim()) {
+      e.title = errMsg?.title ?? "Title is required.";
+    } else if (form.title.trim().length < 2) {
+      e.title = errMsg?.minLen ?? "Must be at least 2 characters.";
+    }
     setErrs(e);
     return Object.keys(e).length === 0;
   };
 
   const handleSave = () => {
     if (!validate()) return;
+
     onSave({
-      title:   form.en,
-      titleAr: form.ar,
-      preview: form.preview,
-      time:    new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
+      title:    form.title,
+      caption:  form.caption,
+      imageUrl: form.preview ?? "",
+      button:   form.button,
+      path:     form.path,
+      preview:  form.preview,
     });
   };
 
@@ -83,17 +102,19 @@ export default function QuickActionModal({
     <div className="overlay" onClick={e => e.target === e.currentTarget && onClose()}>
       <div className="modal">
 
+        {/* Header */}
         <div className="modal-hd">
-          <span className="modal-ttl">{title}</span>
+          <span className="modal-ttl">{title ?? "Add Quick Action"}</span>
           <button className="modal-x" onClick={onClose}>×</button>
         </div>
 
-        <Field label={uploadLabel} required hint={uploadHint} error={errs.img}>
+        {/* Image upload — optional */}
+        <Field label={uploadLabel ?? "Action Image"} hint={uploadHint} error={errs.img}>
           {form.preview
             ? (
               <div className="prev-row">
                 <img className="prev-img" src={form.preview} alt="" />
-                <span className="prev-name">{form.file?.name}</span>
+                <span className="prev-name">{form.file?.name ?? "Image selected"}</span>
                 <button className="prev-rm" onClick={() => { set("file", null); set("preview", null); }}>×</button>
               </div>
             )
@@ -106,8 +127,8 @@ export default function QuickActionModal({
                 onDrop={e      => { e.preventDefault(); setDrag(false); handleFile(e.dataTransfer.files[0]); }}
               >
                 <div className="upz-ico">📁</div>
-                <div className="upz-lbl">{uploadPrompt}</div>
-                <div className="upz-sub">{uploadSub}</div>
+                <div className="upz-lbl">{uploadPrompt ?? "Click to upload or drag & drop"}</div>
+                <div className="upz-sub">{uploadSub ?? "PNG · JPG · SVG · max 5 MB"}</div>
               </div>
             )
           }
@@ -120,31 +141,65 @@ export default function QuickActionModal({
           />
         </Field>
 
+        {/* Title — required */}
+        <Field
+          label={titleLabel ?? "Title"}
+          required
+          error={errs.title}
+          maxLen={titleMax ?? 80}
+          len={form.title.length}
+        >
+          <TextInput
+            value={form.title}
+            onChange={v => { set("title", v); clr("title"); }}
+            placeholder={titlePh ?? "e.g. Business Health"}
+            hasError={!!errs.title}
+            maxLength={titleMax ?? 80}
+          />
+        </Field>
+
+        {/* Caption — optional */}
+        <Field
+          label={captionLabel ?? "Caption"}
+          maxLen={captionMax ?? 120}
+          len={form.caption.length}
+        >
+          <TextInput
+            value={form.caption}
+            onChange={v => set("caption", v)}
+            placeholder={captionPh ?? "Short description..."}
+            maxLength={captionMax ?? 120}
+          />
+        </Field>
+
+        {/* Button Label + Navigation Path — optional, side by side */}
         <div className="f-2">
-          <Field label={enLabel} required error={errs.en} maxLen={enMax} len={form.en.length}>
+          <Field label={buttonLabel ?? "Button Label"} maxLen={buttonMax ?? 40} len={form.button.length}>
             <TextInput
-              value={form.en}
-              onChange={v => { set("en", v); clr("en"); }}
-              placeholder={enPh}
-              hasError={!!errs.en}
-              maxLength={enMax}
+              value={form.button}
+              onChange={v => set("button", v)}
+              placeholder={buttonPh ?? "e.g. Start Now"}
+              maxLength={buttonMax ?? 40}
             />
           </Field>
-          <Field label={arLabel} required error={errs.ar} maxLen={arMax} len={form.ar.length}>
+          <Field label={pathLabel ?? "Navigation Path"} maxLen={pathMax ?? 200} len={form.path.length}>
             <TextInput
-              value={form.ar}
-              onChange={v => { set("ar", v); clr("ar"); }}
-              placeholder={arPh}
-              hasError={!!errs.ar}
-              maxLength={arMax}
-              dir="rtl"
+              value={form.path}
+              onChange={v => set("path", v)}
+              placeholder={pathPh ?? "/screen/name"}
+              maxLength={pathMax ?? 200}
             />
           </Field>
         </div>
 
+        {/* Footer */}
         <div className="m-ft">
-          <button className="m-cancel" onClick={onClose}>{cancelLabel}</button>
-          <button className="m-save"   onClick={handleSave}>{saveLabel}</button>
+          <button className="m-cancel" onClick={onClose}>
+            {cancelLabel ?? "Cancel"}
+          </button>
+          <button className="m-save" onClick={handleSave}>
+            {saveLabel ?? "+ Add Action"}
+          </button>
         </div>
 
       </div>

@@ -16,10 +16,12 @@
 //   onCommit             fn({balance: string, icon: string})
 //   externalError        string|null  — injected balance error from parent
 
-import { useState, useCallback } from "react";
+import { useState, useEffect, useCallback } from "react";
 import Field       from "./Field.jsx";
 import NumberInput from "./NumberInput.jsx";
 import IconInput   from "./Iconinput.jsx";
+// WalletSection.jsx
+
 
 export default function WalletSection({
   sectionTitle,
@@ -29,12 +31,31 @@ export default function WalletSection({
   onCommit, externalError,
 }) {
   const [balance, setBalance] = useState(defaultBalance ?? "");
-  const [icon,    setIcon]    = useState(defaultIcon ?? "");
+  const [icon,    setIcon]    = useState(defaultIcon    ?? "");
   const [err,     setErr]     = useState(null);
 
+  // Sync balance + icon and fire onCommit when DB data arrives
+  useEffect(() => {
+    if (defaultBalance !== undefined && defaultBalance !== null) {
+      setBalance(defaultBalance);
+    }
+    if (defaultIcon !== undefined && defaultIcon !== null) {
+      setIcon(defaultIcon);
+    }
+    if (
+      (defaultBalance !== undefined && defaultBalance !== null) ||
+      (defaultIcon    !== undefined && defaultIcon    !== null)
+    ) {
+      onCommit?.({
+        balance: defaultBalance ?? "",
+        icon:    defaultIcon    ?? "",
+      });
+    }
+  }, [defaultBalance, defaultIcon]);
+
   const validateBalance = useCallback(v => {
-    if (!v)                                        return "Wallet balance is required.";
-    if (isNaN(Number(v)) || Number(v) < 0)         return "Must be a valid non-negative number.";
+    if (!v)                                 return "Wallet balance is required.";
+    if (isNaN(Number(v)) || Number(v) < 0) return "Must be a valid non-negative number.";
     return null;
   }, []);
 
@@ -56,13 +77,7 @@ export default function WalletSection({
       <div className="s-hd">
         <span className="s-title">{sectionTitle}</span>
       </div>
-
-      <Field
-        label={balanceLabel}
-        required
-        hint={balanceHint}
-        error={activeError}
-      >
+      <Field label={balanceLabel} required hint={balanceHint} error={activeError}>
         <NumberInput
           value={balance}
           onChange={handleBalance}
@@ -72,9 +87,7 @@ export default function WalletSection({
           max={balanceMax}
         />
       </Field>
-
       <div className="div" />
-
       <Field label={iconLabel} hint={iconHint}>
         <IconInput
           value={icon}

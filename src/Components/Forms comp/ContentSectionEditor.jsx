@@ -1,99 +1,180 @@
-// ContentSectionEditorPage.jsx
-// ─────────────────────────────────────────────────────────────────────────────
-// THE FINAL PAGE.
-// Imports every section component and assembles them.
-// This is the ONLY file that contains real content:
-//   labels, placeholders, hints, default values, validation messages,
-//   and all EN/AR translations.
-// ─────────────────────────────────────────────────────────────────────────────
 
-import { useState, useRef }         from "react";
+
+
+
+import { useState, useRef, useEffect } from "react";
 import "./Form.css";
-import LanguageToggleSection        from "./Languagetogglesection .jsx";
-import GreetingSection              from "./Greetingsection.jsx";
-import UserNameSection              from "./Usernamesection.jsx";
-import WalletSection                from "./Walletsection.jsx";
-import ContentSection               from "./Contentsection.jsx";
-import QuickActionsSection          from "./Quickactionssection.jsx";
-import FormFooter                   from "./Formfooter.jsx";
 
-// ── Language options fed to the toggle ──────────────────────────────────────
+import { supabase } from "../../Pages/Supabase.jsx";
+
+import LanguageToggleSection from "./Languagetogglesection .jsx";
+import GreetingSection       from "./Greetingsection.jsx";
+import UserNameSection       from "./Usernamesection.jsx";
+import WalletSection         from "./Walletsection.jsx";
+import ContentSection        from "./Contentsection.jsx";
+import QuickActionsSection   from "./Quickactionssection.jsx";
+import FormFooter            from "./Formfooter.jsx";
+
 const LANG_OPTIONS = [
   { value: "en", label: "English",          dir: "ltr" },
   { value: "ar", label: "العربية (Arabic)", dir: "rtl" },
 ];
 
-// ── Default form values ──────────────────────────────────────────────────────
-const DEFAULTS = {
-  greeting:    "Good Morning",
-  greetingAr:  "صباح الخير",
-  userName:    "Welcome Back, {user}",
-  userNameAr:  "مرحباً بعودتك، {user}",
-  balance:     "45000",
-  icon:        "💎",
-  content:     "",
-  contentAr:   "",
-  qaItems:     [
-    { title: "Business Health", titleAr: "صحة الأعمال", preview: null, time: "8:30" },
-  ],
-};
-
-// ── Main Page ────────────────────────────────────────────────────────────────
 export default function ContentSectionEditorPage() {
   const [lang,       setLang]       = useState("en");
   const [pageErrors, setPageErrors] = useState({});
   const [toast,      setToast]      = useState(null);
+  const [loading,    setLoading]    = useState(false);
+  const [dbRow,      setDbRow]      = useState(null);
 
   const isAr = lang === "ar";
 
-  // Aggregated form data — sections push their latest value here via onCommit
-  const data = useRef({ ...DEFAULTS });
+  const data = useRef({
+    greeting_text:          "",
+    name:                   "",
+    username:               "",
+    review_number:          "",
+    pfp:                    "",
+    rafiqs_advicer:         "",
+    quick_actions_title:    "",
+    quick_actions_captionn: "",
+    quick_actions_image:    "",
+    quick_actions_button:   "",
+    Path:                   "",
+  });
 
-  // ── Page-level validation (runs only on Save) ────────────────────────────
+  // ── Fetch ─────────────────────────────────────────────────────────────────
+  useEffect(() => {
+    const fetchData = async () => {
+      const { data: row, error } = await supabase
+        .from("home screen eng")
+        .select("*")
+        .eq("id", 1)
+        .single();
+
+      if (error) {
+        console.error("❌ Fetch error:", error.message);
+        return;
+      }
+
+      console.log("✅ Fetched row:", row);
+
+      data.current = {
+        greeting_text:          row.greeting_text          ?? "",
+        name:                   row.name                   ?? "",
+        username:               row.username               ?? "",
+        review_number:          String(row.review_number   ?? ""),
+        pfp:                    row.pfp                    ?? "",
+        rafiqs_advicer:         row.rafiqs_advicer         ?? "",
+        quick_actions_title:    row.quick_actions_title    ?? "",
+        quick_actions_captionn: row.quick_actions_captionn ?? "",
+        quick_actions_image:    row.quick_actions_image    ?? "",
+        quick_actions_button:   row.quick_actions_button   ?? "",
+        Path:                   row.Path                   ?? "",
+      };
+
+      setDbRow(row);
+    };
+
+    fetchData();
+  }, []);
+
+  // ── Validation ────────────────────────────────────────────────────────────
   const validate = () => {
     const d = data.current;
     const e = {};
 
-    const greeting = isAr ? d.greetingAr ?? "" : d.greeting  ?? "";
-    const userName  = isAr ? d.userNameAr ?? "" : d.userName  ?? "";
-    const content   = isAr ? d.contentAr  ?? "" : d.content   ?? "";
-
-    if (!greeting.trim())
+    if (!d.greeting_text.trim())
       e.greeting = isAr ? "نص التحية مطلوب." : "Greeting text is required.";
 
-    if (!userName.trim())
-      e.userName = isAr ? "نص عرض الاسم مطلوب." : "User name display text is required.";
+    if (!d.name.trim())
+      e.userName = isAr ? "الاسم مطلوب." : "Name is required.";
 
-    if (!d.balance)
-      e.balance = isAr ? "رصيد المحفظة مطلوب." : "Wallet balance is required.";
-    else if (isNaN(Number(d.balance)) || Number(d.balance) < 0)
-      e.balance = isAr ? "يجب أن يكون رقماً موجباً." : "Must be a non-negative number.";
-
-    if (!content.replace(/<[^>]*>/g, "").trim())
-      e.content = isAr ? "محتوى القسم لا يمكن أن يكون فارغاً." : "Section content cannot be empty.";
+    if (!d.review_number || isNaN(Number(d.review_number)))
+      e.balance = isAr ? "الرقم مطلوب." : "Review number is required.";
 
     setPageErrors(e);
     return Object.keys(e).length === 0;
   };
 
-  const handleSave = () => {
+  // ── Save ──────────────────────────────────────────────────────────────────
+  const handleSave = async () => {
     if (!validate()) return;
-    setToast(isAr ? "✓ تم الحفظ بنجاح" : "✓ Section saved successfully");
+
+    setLoading(true);
+
+    const d = data.current;
+
+    // Build the payload — every column exactly as it is in the DB
+    const payload = {
+      id:                     1,              // required for upsert to target the right row
+      greeting_text:          d.greeting_text,
+      name:                   d.name,
+      username:               d.username,
+      review_number:          Number(d.review_number),
+      pfp:                    d.pfp,
+      rafiqs_advicer:         d.rafiqs_advicer,
+      quick_actions_title:    d.quick_actions_title,
+      quick_actions_captionn: d.quick_actions_captionn,
+      quick_actions_image:    d.quick_actions_image,
+      quick_actions_button:   d.quick_actions_button,
+      Path:                   d.Path,
+    };
+
+    console.log("💾 Saving payload:", payload);
+
+    // Use upsert instead of update — works even if RLS blocks plain UPDATE
+    const { data: res, error } = await supabase
+      .from("home screen eng")
+      .upsert(payload, { onConflict: "id" })
+      .select();
+
+    setLoading(false);
+
+    if (error) {
+      console.error("❌ Save error:", error);
+      setToast(`❌ ${error.message}`);
+      setTimeout(() => setToast(null), 4000);
+      return;
+    }
+
+    console.log("✅ Save result:", res);
+
+    // Refresh dbRow so cancel works correctly after save
+    if (res && res.length > 0) {
+      setDbRow(res[0]);
+    }
+
+    setToast("✓ Saved successfully");
     setTimeout(() => setToast(null), 2500);
   };
 
+  // ── Cancel ────────────────────────────────────────────────────────────────
   const handleCancel = () => {
-    data.current = { ...DEFAULTS };
+    if (!dbRow) return;
+    data.current = {
+      greeting_text:          dbRow.greeting_text          ?? "",
+      name:                   dbRow.name                   ?? "",
+      username:               dbRow.username               ?? "",
+      review_number:          String(dbRow.review_number   ?? ""),
+      pfp:                    dbRow.pfp                    ?? "",
+      rafiqs_advicer:         dbRow.rafiqs_advicer         ?? "",
+      quick_actions_title:    dbRow.quick_actions_title    ?? "",
+      quick_actions_captionn: dbRow.quick_actions_captionn ?? "",
+      quick_actions_image:    dbRow.quick_actions_image    ?? "",
+      quick_actions_button:   dbRow.quick_actions_button   ?? "",
+      Path:                   dbRow.Path                   ?? "",
+    };
     setPageErrors({});
-    setLang("en");
+    setDbRow({ ...dbRow });
   };
 
-  // ── Render ───────────────────────────────────────────────────────────────
+  // ── Render ────────────────────────────────────────────────────────────────
   return (
     <>
       <div className="pw" dir={isAr ? "rtl" : "ltr"}>
 
-        {/* ── 1. Language Toggle ────────────────────────────────────────── */}
+        {/* 1 · Language Toggle */}
         <LanguageToggleSection
           eyebrow="Editing Language"
           options={LANG_OPTIONS}
@@ -101,119 +182,151 @@ export default function ContentSectionEditorPage() {
           onChange={setLang}
         />
 
-        {/* ── 2. Greeting Text ──────────────────────────────────────────── */}
+        {/* 2 · Greeting Text → greeting_text */}
         <GreetingSection
-          label={isAr       ? "نص التحية"   : "Greeting Text"}
-          placeholder={isAr ? "صباح الخير"  : "Good Morning"}
+          label={isAr       ? "نص التحية"  : "Greeting Text"}
+          placeholder={isAr ? "صباح الخير" : "Welcome back"}
           maxLength={80}
           required
           dir={isAr ? "rtl" : "ltr"}
-          defaultValue={isAr ? DEFAULTS.greetingAr : DEFAULTS.greeting}
-          onCommit={({ greeting }) => {
-            if (isAr) data.current.greetingAr = greeting;
-            else      data.current.greeting   = greeting;
-          }}
+          defaultValue={dbRow?.greeting_text ?? ""}
+          onCommit={({ greeting }) => { data.current.greeting_text = greeting; }}
           externalError={pageErrors.greeting ?? null}
         />
 
-        {/* ── 3. User Name Display ──────────────────────────────────────── */}
+        {/* 3 · Name → name  /  Username → username */}
         <UserNameSection
-          label={isAr       ? "عرض اسم المستخدم"                        : "User Name Display"}
-          hint={isAr        ? "استخدم {user} كمتغير للاسم الفعلي"       : "Use {user} as a dynamic placeholder for the user's name"}
-          placeholder={isAr ? "مرحبًا بعودتك، {user}"                  : "Welcome Back, {user}"}
-          maxLength={100}
+          label={isAr       ? "الاسم"                             : "Name"}
+          hint={isAr        ? "الاسم المعروض على الشاشة الرئيسية" : "Name displayed on the home screen"}
+          placeholder={isAr ? "نايرة"                             : "Nayerah"}
+          maxLength={80}
           required
           dir={isAr ? "rtl" : "ltr"}
-          defaultValue={isAr ? DEFAULTS.userNameAr : DEFAULTS.userName}
-          onCommit={({ userName }) => {
-            if (isAr) data.current.userNameAr = userName;
-            else      data.current.userName   = userName;
-          }}
+          defaultValue={dbRow?.name ?? ""}
+          onCommit={({ userName }) => { data.current.name = userName; }}
           externalError={pageErrors.userName ?? null}
+          extraLabel={isAr      ? "اسم المستخدم" : "Username"}
+          extraPlaceholder="@Nayerah.kotn"
+          extraMaxLength={60}
+          extraDefaultValue={dbRow?.username ?? ""}
+          onExtraCommit={v => { data.current.username = v; }}
         />
 
-        {/* ── 4. Wallet ─────────────────────────────────────────────────── */}
+        {/* 4 · Review Number → review_number  /  PFP → pfp */}
         <WalletSection
-          sectionTitle={isAr      ? "المحفظة"                             : "Wallet"}
-          balanceLabel={isAr      ? "رصيد المحفظة"                        : "Wallet Balance"}
-          balanceHint={isAr       ? "يُعرض رصيد المحفظة بالعملات"        : "Display user wallet balance in coins"}
-          balancePlaceholder="45000"
+          sectionTitle={isAr      ? "الإحصائيات"                         : "Stats"}
+          balanceLabel={isAr      ? "عدد المراجعات"                       : "Review Number"}
+          balanceHint={isAr       ? "الرقم المعروض بجانب الملف الشخصي"   : "Number shown next to the profile picture"}
+          balancePlaceholder="124"
           balanceMin={0}
-          balanceMax={999_999_999}
-          iconLabel={isAr         ? "أيقونة المحفظة"                      : "Wallet Icon"}
-          iconHint={isAr          ? "رمز أو إيموجي يظهر بجانب الرصيد"    : "Emoji or symbol shown next to the balance"}
-          iconPlaceholder="💎"
-          defaultBalance={DEFAULTS.balance}
-          defaultIcon={DEFAULTS.icon}
+          balanceMax={999999999}
+          iconLabel={isAr         ? "رابط صورة الملف الشخصي"             : "Profile Picture URL"}
+          iconHint={isAr          ? "رابط الصورة الشخصية للمستخدم (pfp)" : "URL of the user's profile picture (pfp)"}
+          iconPlaceholder="https://..."
+          defaultBalance={String(dbRow?.review_number ?? "")}
+          defaultIcon={dbRow?.pfp ?? ""}
           onCommit={({ balance, icon }) => {
-            data.current.balance = balance;
-            data.current.icon    = icon;
+            data.current.review_number = balance;
+            data.current.pfp           = icon;
           }}
           externalError={pageErrors.balance ?? null}
         />
 
-        {/* ── 5. Section Content (Rich Text) ────────────────────────────── */}
+        {/* 5 · Rafiqs Advicer → rafiqs_advicer */}
         <ContentSection
-          sectionTitle={isAr  ? "محتوى القسم" : "Section Content"}
-          badge={isAr         ? "محرر نصوص"   : "Rich Text"}
-          label={isAr         ? "المحتوى"      : "Content"}
-          placeholder={isAr   ? "اكتب محتوى القسم هنا..." : "Write section content here..."}
-          required
-          defaultValue=""
-          onCommit={({ content }) => {
-            if (isAr) data.current.contentAr = content;
-            else      data.current.content   = content;
-          }}
-          externalError={pageErrors.content ?? null}
+          sectionTitle={isAr  ? "نصيحة رفيق"  : "Rafiqs Advicer"}
+          badge={isAr         ? "محرر نصوص"    : "Rich Text"}
+          label={isAr         ? "المحتوى"       : "Content"}
+          placeholder={isAr   ? "اكتب النصيحة هنا..." : "Write the advicer content here..."}
+          required={false}
+          defaultValue={dbRow?.rafiqs_advicer ?? ""}
+          onCommit={({ content }) => { data.current.rafiqs_advicer = content; }}
+          externalError={null}
         />
 
-        {/* ── 6. Quick Actions ──────────────────────────────────────────── */}
+        {/* 6 · Quick Actions */}
         <QuickActionsSection
-          sectionTitle={isAr     ? "الإجراءات السريعة"                  : "Quick Actions"}
-          addLabel={isAr         ? "إضافة إجراء"                        : "Add Quick Action"}
-          addRowLabel={isAr      ? "إضافة إجراء سريع"                   : "Add Quick Action"}
-          groupPlaceholder={isAr ? "الإجراءات السريعة"                  : "Quick Actions"}
+          sectionTitle={isAr     ? "الإجراءات السريعة"                   : "Quick Actions"}
+          addLabel={isAr         ? "إضافة إجراء"                         : "Add Quick Action"}
+          addRowLabel={isAr      ? "إضافة إجراء سريع"                    : "Add Quick Action"}
+          groupPlaceholder={isAr ? "الإجراءات السريعة"                   : "Quick Actions"}
           emptyText={isAr        ? "لا توجد إجراءات. أضف واحداً أعلاه." : "No actions yet — add one above."}
           lang={lang}
-          defaultItems={DEFAULTS.qaItems}
-          onCommit={items => { data.current.qaItems = items; }}
+          defaultItems={
+            dbRow?.quick_actions_title
+              ? [{
+                  title:    dbRow.quick_actions_title    ?? "",
+                  caption:  dbRow.quick_actions_captionn ?? "",
+                  imageUrl: dbRow.quick_actions_image    ?? "",
+                  button:   dbRow.quick_actions_button   ?? "",
+                  path:     dbRow.Path                   ?? "",
+                  preview:  dbRow.quick_actions_image    ?? null,
+                }]
+              : []
+          }
+          onCommit={items => {
+            const first = items[0] ?? {};
+            data.current.quick_actions_title    = first.title    ?? "";
+            data.current.quick_actions_captionn = first.caption  ?? "";
+            data.current.quick_actions_image    = first.imageUrl ?? "";
+            data.current.quick_actions_button   = first.button   ?? "";
+            data.current.Path                   = first.path     ?? "";
+          }}
           toastText={isAr ? "✓ تمت الإضافة" : "✓ Quick action added"}
           modal={{
-            title:         isAr ? "إضافة إجراء سريع"           : "Add Quick Action",
-            uploadLabel:   isAr ? "صورة الإجراء"                : "Action Image",
-            uploadPrompt:  isAr ? "انقر للتحميل أو اسحب وأفلت" : "Click to upload or drag & drop",
-            uploadSub:     "PNG · JPG · SVG · max 5 MB",
-            uploadHint:    isAr ? "الحجم المقترح: 64×64 بكسل"  : "Recommended: 64 × 64 px",
-            enLabel:       "Title (EN)",
-            enPh:          "e.g. Business Health",
-            enMax:         60,
-            arLabel:       "العنوان (AR)",
-            arPh:          "مثال: صحة الأعمال",
-            arMax:         60,
-            cancelLabel:   isAr ? "إلغاء"   : "Cancel",
-            saveLabel:     isAr ? "+ إضافة" : "+ Add Action",
+            title:        isAr ? "إضافة إجراء سريع"           : "Add Quick Action",
+            uploadLabel:  isAr ? "صورة الإجراء"                : "Action Image",
+            uploadPrompt: isAr ? "انقر للتحميل أو اسحب وأفلت" : "Click to upload or drag & drop",
+            uploadSub:    "PNG · JPG · SVG · max 5 MB",
+            uploadHint:   isAr ? "الحجم المقترح: 64×64 بكسل"  : "Recommended: 64 × 64 px",
+            titleLabel:   isAr ? "العنوان"           : "Title",
+            titlePh:      isAr ? "مثال: صحة الأعمال" : "e.g. Business Health",
+            titleMax:     80,
+            captionLabel: isAr ? "التعليق"           : "Caption",
+            captionPh:    isAr ? "وصف قصير..."       : "Short description...",
+            captionMax:   120,
+            buttonLabel:  isAr ? "نص الزر"           : "Button Label",
+            buttonPh:     isAr ? "مثال: ابدأ الآن"   : "e.g. Start Now",
+            buttonMax:    40,
+            pathLabel:    isAr ? "المسار"            : "Navigation Path",
+            pathPh:       "/screen/business-health",
+            pathMax:      200,
+            cancelLabel:  isAr ? "إلغاء"   : "Cancel",
+            saveLabel:    isAr ? "+ إضافة" : "+ Add Action",
             errMsg: {
-              image:     isAr ? "الصورة مطلوبة."                            : "An image is required.",
-              imageType: isAr ? "نوع الملف غير مدعوم."                      : "Please upload a valid image (PNG, JPG, SVG).",
-              imageSize: isAr ? "يجب أن يكون الحجم أقل من 5 ميغابايت."     : "File must be under 5 MB.",
-              en:        isAr ? "العنوان الإنجليزي مطلوب."                  : "English title is required.",
-              ar:        isAr ? "العنوان العربي مطلوب."                      : "Arabic title is required.",
-              minLen:    isAr ? "يجب أن يكون حرفين على الأقل."             : "Must be at least 2 characters.",
+              image:     isAr ? "الصورة مطلوبة."                        : "An image is required.",
+              imageType: isAr ? "نوع الملف غير مدعوم."                  : "Please upload a valid image (PNG, JPG, SVG).",
+              imageSize: isAr ? "يجب أن يكون الحجم أقل من 5 ميغابايت." : "File must be under 5 MB.",
+              title:     isAr ? "العنوان مطلوب."                        : "Title is required.",
+              minLen:    isAr ? "يجب أن يكون حرفين على الأقل."         : "Must be at least 2 characters.",
             },
           }}
         />
 
-        {/* ── 7. Footer ─────────────────────────────────────────────────── */}
+        {/* 7 · Footer */}
         <FormFooter
           cancelLabel={isAr ? "إلغاء"     : "Cancel"}
-          saveLabel={isAr   ? "حفظ القسم" : "Save Section"}
+          saveLabel={loading
+            ? (isAr ? "جارٍ الحفظ…" : "Saving…")
+            : (isAr ? "حفظ القسم"   : "Save Section")}
           onCancel={handleCancel}
           onSave={handleSave}
         />
 
       </div>
 
-      {toast && <div className="toast">{toast}</div>}
+      {toast && (
+        <div
+          className="toast"
+          style={
+            toast.startsWith("❌") || toast.startsWith("⚠️")
+              ? { background: "var(--red)" }
+              : {}
+          }
+        >
+          {toast}
+        </div>
+      )}
     </>
   );
 }

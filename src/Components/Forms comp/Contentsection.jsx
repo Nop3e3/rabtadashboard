@@ -1,17 +1,6 @@
-// components/ContentSection.jsx
-// Rich-text content editor card with badge label.
-// Owns HTML value state and empty-content validation.
-// Props:
-//   sectionTitle   string
-//   badge          string        — small pill label shown in header (e.g. "Rich Text")
-//   label          string        — field label
-//   placeholder    string
-//   required       bool
-//   defaultValue   string        — initial HTML string
-//   onCommit       fn({content: string})  — fires on every keystroke
-//   externalError  string|null
+// ContentSection.jsx
 
-import { useState, useCallback } from "react";
+import { useState, useEffect, useCallback } from "react";
 import Field          from "./Field.jsx";
 import RichTextEditor from "./RichTextEditor.jsx";
 
@@ -21,6 +10,14 @@ export default function ContentSection({
 }) {
   const [val, setVal] = useState(defaultValue ?? "");
   const [err, setErr] = useState(null);
+
+  // Sync + fire onCommit when DB data arrives
+  useEffect(() => {
+    if (defaultValue !== undefined && defaultValue !== null) {
+      setVal(defaultValue);
+      onCommit?.({ content: defaultValue });
+    }
+  }, [defaultValue]);
 
   const validate = useCallback(v => {
     const text = v?.replace(/<[^>]*>/g, "").trim();
@@ -42,7 +39,6 @@ export default function ContentSection({
         <span className="s-title">{sectionTitle}</span>
         {badge && <span className="s-badge">{badge}</span>}
       </div>
-
       <Field label={label} required={required} error={activeError}>
         <RichTextEditor
           value={val}
