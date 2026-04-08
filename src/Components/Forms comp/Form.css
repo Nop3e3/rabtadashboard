@@ -941,3 +941,133 @@ body {
   background: var(--border);
   border-radius: 3px;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+.dl-section {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-bottom: 32px;
+}
+
+.dl-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.dl-title {
+  font-family: 'Lexend Exa', sans-serif;
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--text-primary, #fff);
+}
+
+.dl-add-btn {
+  font-family: 'Lexend Exa', sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  padding: 10px 20px;
+  border-radius: 100px;
+  border: none;
+  cursor: pointer;
+  background: var(--accent, #7a9a2e);
+  color: #1a2000;
+  transition: opacity 0.15s;
+}
+.dl-add-btn:hover { opacity: 0.85; }
+
+.dl-card {
+  border: 1px solid var(--border, rgba(255,255,255,0.1));
+  border-radius: 14px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  background: var(--surface, rgba(255,255,255,0.03));
+}
+
+.dl-empty {
+  font-family: 'Lexend Exa', sans-serif;
+  font-size: 13px;
+  color: var(--text-muted, #555);
+  text-align: center;
+  padding: 8px 0;
+}
+
+.dl-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: grab;
+}
+.dl-row:active { cursor: grabbing; }
+
+.dl-handle {
+  color: var(--text-muted, #555);
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+}
+
+.dl-input {
+  flex: 1;
+  font-family: 'Lexend Exa', sans-serif;
+  font-size: 13.5px;
+  padding: 10px 16px;
+  border-radius: 10px;
+  border: 1px solid var(--border, rgba(255,255,255,0.12));
+  background: var(--input-bg, rgba(255,255,255,0.05));
+  color: var(--text-primary, #fff);
+  outline: none;
+  transition: border-color 0.15s;
+}
+.dl-input::placeholder { color: var(--text-muted, #555); }
+.dl-input:focus { border-color: var(--accent, #7a9a2e); }
+
+.dl-delete {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: var(--text-muted, #555);
+  display: flex;
+  align-items: center;
+  padding: 4px;
+  border-radius: 6px;
+  flex-shrink: 0;
+  transition: color 0.15s;
+}
+.dl-delete:hover { color: #e05555; }
+
+.dl-add-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  font-family: 'Lexend Exa', sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--accent, #a8c640);
+  padding: 4px 0;
+  transition: opacity 0.15s;
+}
+.dl-add-row:hover { opacity: 0.75; }
+
+.dl-add-row-icon {
+  font-size: 16px;
+  line-height: 1;
+}
