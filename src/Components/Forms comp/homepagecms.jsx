@@ -1,7 +1,3 @@
-
-
-
-
 import { useState, useRef, useEffect } from "react";
 import "./Form.css";
 
@@ -25,7 +21,6 @@ export default function ContentSectionEditorPage() {
   const [pageErrors, setPageErrors] = useState({});
   const [toast,      setToast]      = useState(null);
   const [loading,    setLoading]    = useState(false);
-  const [dbRow,      setDbRow]      = useState(null);
 
   const isAr = lang === "ar";
 
@@ -42,42 +37,6 @@ export default function ContentSectionEditorPage() {
     quick_actions_button:   "",
     Path:                   "",
   });
-
-  // ── Fetch ─────────────────────────────────────────────────────────────────
-  useEffect(() => {
-    const fetchData = async () => {
-      const { data: row, error } = await supabase
-        .from("home screen eng")
-        .select("*")
-        .eq("id", 1)
-        .single();
-
-      if (error) {
-        console.error("❌ Fetch error:", error.message);
-        return;
-      }
-
-      console.log("✅ Fetched row:", row);
-
-      data.current = {
-        greeting_text:          row.greeting_text          ?? "",
-        name:                   row.name                   ?? "",
-        username:               row.username               ?? "",
-        review_number:          String(row.review_number   ?? ""),
-        pfp:                    row.pfp                    ?? "",
-        rafiqs_advicer:         row.rafiqs_advicer         ?? "",
-        quick_actions_title:    row.quick_actions_title    ?? "",
-        quick_actions_captionn: row.quick_actions_captionn ?? "",
-        quick_actions_image:    row.quick_actions_image    ?? "",
-        quick_actions_button:   row.quick_actions_button   ?? "",
-        Path:                   row.Path                   ?? "",
-      };
-
-      setDbRow(row);
-    };
-
-    fetchData();
-  }, []);
 
   // ── Validation ────────────────────────────────────────────────────────────
   const validate = () => {
@@ -97,7 +56,7 @@ export default function ContentSectionEditorPage() {
     return Object.keys(e).length === 0;
   };
 
-  // ── Save ──────────────────────────────────────────────────────────────────
+  // ── Save (always inserts a new row) ───────────────────────────────────────
   const handleSave = async () => {
     if (!validate()) return;
 
@@ -105,9 +64,8 @@ export default function ContentSectionEditorPage() {
 
     const d = data.current;
 
-    // Build the payload — every column exactly as it is in the DB
+    // No `id` field — Supabase will auto-generate one
     const payload = {
-      id:                     1,              // required for upsert to target the right row
       greeting_text:          d.greeting_text,
       name:                   d.name,
       username:               d.username,
@@ -121,52 +79,43 @@ export default function ContentSectionEditorPage() {
       Path:                   d.Path,
     };
 
-    console.log("💾 Saving payload:", payload);
+    console.log("💾 Inserting new row:", payload);
 
-    // Use upsert instead of update — works even if RLS blocks plain UPDATE
     const { data: res, error } = await supabase
       .from("home screen eng")
-      .upsert(payload, { onConflict: "id" })
+      .insert(payload)
       .select();
 
     setLoading(false);
 
     if (error) {
-      console.error("❌ Save error:", error);
+      console.error("❌ Insert error:", error);
       setToast(`❌ ${error.message}`);
       setTimeout(() => setToast(null), 4000);
       return;
     }
 
-    console.log("✅ Save result:", res);
-
-    // Refresh dbRow so cancel works correctly after save
-    if (res && res.length > 0) {
-      setDbRow(res[0]);
-    }
-
+    console.log("✅ Inserted row:", res);
     setToast("✓ Saved successfully");
     setTimeout(() => setToast(null), 2500);
   };
 
-  // ── Cancel ────────────────────────────────────────────────────────────────
+  // ── Cancel (just clears the form) ─────────────────────────────────────────
   const handleCancel = () => {
-    if (!dbRow) return;
     data.current = {
-      greeting_text:          dbRow.greeting_text          ?? "",
-      name:                   dbRow.name                   ?? "",
-      username:               dbRow.username               ?? "",
-      review_number:          String(dbRow.review_number   ?? ""),
-      pfp:                    dbRow.pfp                    ?? "",
-      rafiqs_advicer:         dbRow.rafiqs_advicer         ?? "",
-      quick_actions_title:    dbRow.quick_actions_title    ?? "",
-      quick_actions_captionn: dbRow.quick_actions_captionn ?? "",
-      quick_actions_image:    dbRow.quick_actions_image    ?? "",
-      quick_actions_button:   dbRow.quick_actions_button   ?? "",
-      Path:                   dbRow.Path                   ?? "",
+      greeting_text:          "",
+      name:                   "",
+      username:               "",
+      review_number:          "",
+      pfp:                    "",
+      rafiqs_advicer:         "",
+      quick_actions_title:    "",
+      quick_actions_captionn: "",
+      quick_actions_image:    "",
+      quick_actions_button:   "",
+      Path:                   "",
     };
     setPageErrors({});
-    setDbRow({ ...dbRow });
   };
 
   // ── Render ────────────────────────────────────────────────────────────────
@@ -174,7 +123,6 @@ export default function ContentSectionEditorPage() {
     <>
       <div className="pw" dir={isAr ? "rtl" : "ltr"}>
 
-        {/* 1 · Language Toggle */}
         <LanguageToggleSection
           eyebrow="Editing Language"
           options={LANG_OPTIONS}
@@ -182,19 +130,17 @@ export default function ContentSectionEditorPage() {
           onChange={setLang}
         />
 
-        {/* 2 · Greeting Text → greeting_text */}
         <GreetingSection
           label={isAr       ? "نص التحية"  : "Greeting Text"}
           placeholder={isAr ? "صباح الخير" : "Welcome back"}
           maxLength={80}
           required
           dir={isAr ? "rtl" : "ltr"}
-          defaultValue={dbRow?.greeting_text ?? ""}
+          defaultValue=""
           onCommit={({ greeting }) => { data.current.greeting_text = greeting; }}
           externalError={pageErrors.greeting ?? null}
         />
 
-        {/* 3 · Name → name  /  Username → username */}
         <UserNameSection
           label={isAr       ? "الاسم"                             : "Name"}
           hint={isAr        ? "الاسم المعروض على الشاشة الرئيسية" : "Name displayed on the home screen"}
@@ -202,17 +148,16 @@ export default function ContentSectionEditorPage() {
           maxLength={80}
           required
           dir={isAr ? "rtl" : "ltr"}
-          defaultValue={dbRow?.name ?? ""}
+          defaultValue=""
           onCommit={({ userName }) => { data.current.name = userName; }}
           externalError={pageErrors.userName ?? null}
           extraLabel={isAr      ? "اسم المستخدم" : "Username"}
           extraPlaceholder="@Nayerah.kotn"
           extraMaxLength={60}
-          extraDefaultValue={dbRow?.username ?? ""}
+          extraDefaultValue=""
           onExtraCommit={v => { data.current.username = v; }}
         />
 
-        {/* 4 · Review Number → review_number  /  PFP → pfp */}
         <WalletSection
           sectionTitle={isAr      ? "الإحصائيات"                         : "Stats"}
           balanceLabel={isAr      ? "عدد المراجعات"                       : "Review Number"}
@@ -223,8 +168,8 @@ export default function ContentSectionEditorPage() {
           iconLabel={isAr         ? "رابط صورة الملف الشخصي"             : "Profile Picture URL"}
           iconHint={isAr          ? "رابط الصورة الشخصية للمستخدم (pfp)" : "URL of the user's profile picture (pfp)"}
           iconPlaceholder="https://..."
-          defaultBalance={String(dbRow?.review_number ?? "")}
-          defaultIcon={dbRow?.pfp ?? ""}
+          defaultBalance=""
+          defaultIcon=""
           onCommit={({ balance, icon }) => {
             data.current.review_number = balance;
             data.current.pfp           = icon;
@@ -232,19 +177,17 @@ export default function ContentSectionEditorPage() {
           externalError={pageErrors.balance ?? null}
         />
 
-        {/* 5 · Rafiqs Advicer → rafiqs_advicer */}
         <ContentSection
           sectionTitle={isAr  ? "نصيحة رفيق"  : "Rafiqs Advicer"}
           badge={isAr         ? "محرر نصوص"    : "Rich Text"}
           label={isAr         ? "المحتوى"       : "Content"}
           placeholder={isAr   ? "اكتب النصيحة هنا..." : "Write the advicer content here..."}
           required={false}
-          defaultValue={dbRow?.rafiqs_advicer ?? ""}
+          defaultValue=""
           onCommit={({ content }) => { data.current.rafiqs_advicer = content; }}
           externalError={null}
         />
 
-        {/* 6 · Quick Actions */}
         <QuickActionsSection
           sectionTitle={isAr     ? "الإجراءات السريعة"                   : "Quick Actions"}
           addLabel={isAr         ? "إضافة إجراء"                         : "Add Quick Action"}
@@ -252,18 +195,7 @@ export default function ContentSectionEditorPage() {
           groupPlaceholder={isAr ? "الإجراءات السريعة"                   : "Quick Actions"}
           emptyText={isAr        ? "لا توجد إجراءات. أضف واحداً أعلاه." : "No actions yet — add one above."}
           lang={lang}
-          defaultItems={
-            dbRow?.quick_actions_title
-              ? [{
-                  title:    dbRow.quick_actions_title    ?? "",
-                  caption:  dbRow.quick_actions_captionn ?? "",
-                  imageUrl: dbRow.quick_actions_image    ?? "",
-                  button:   dbRow.quick_actions_button   ?? "",
-                  path:     dbRow.Path                   ?? "",
-                  preview:  dbRow.quick_actions_image    ?? null,
-                }]
-              : []
-          }
+          defaultItems={[]}
           onCommit={items => {
             const first = items[0] ?? {};
             data.current.quick_actions_title    = first.title    ?? "";
@@ -303,7 +235,6 @@ export default function ContentSectionEditorPage() {
           }}
         />
 
-        {/* 7 · Footer */}
         <FormFooter
           cancelLabel={isAr ? "إلغاء"     : "Cancel"}
           saveLabel={loading

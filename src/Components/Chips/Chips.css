@@ -1,0 +1,83 @@
+@import url('https://fonts.googleapis.com/css2?family=Lexend+Exa:wght@400;500&display=swap');
+
+.chip {
+  font-family: 'Lexend Exa', sans-serif;
+  font-size: 13.5px;
+  font-weight: 400;
+  padding: 10px 20px;
+  border-radius: 100px;
+  border: none;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background 0.18s, color 0.18s, transform 0.12s;
+  flex-shrink: 0;
+  color: #ccc;
+  background: rgba(255, 252, 252, 0.122);
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  user-select: none;
+}
+
+.chip:hover  { background: #2a2a2a;  }
+.chip:active { transform: scale(0.97); }
+
+.chip--active {
+  background: linear-gradient(135deg, #d4e86e 0%, #c5d95a 100%);
+  color: #1a2000;
+  font-weight: 500;
+}
+
+.chip--active:hover {
+  background: linear-gradient(135deg, #daf070 0%, #cce060 100%);
+}
+.nav-chips-container {
+    margin-top: 20px;
+  border-radius: 100px;
+  padding: 8px 10px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  width: 100%;
+}
+
+.nav-chips-scroll {
+  display: flex;
+  gap: 6px;
+  flex: 1;
+  justify-content: space-between;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.nav-chips-scroll::-webkit-scrollbar {
+  display: none;
+}
+
+.nav-chips-arrow {
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  border-radius: 50%;
+  flex-shrink: 0;
+  transition: background 0.15s;
+  background: transparent;
+  border: none;
+  padding: 0;
+}
+
+.nav-chips-arrow:hover  { background: rgba(255, 255, 255, 0.08); }
+.nav-chips-arrow:active { background: rgba(255, 255, 255, 0.14); }
+
+.nav-chips-arrow svg {
+  width: 16px;
+  height: 16px;
+  fill: none;
+  stroke: #fff;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
