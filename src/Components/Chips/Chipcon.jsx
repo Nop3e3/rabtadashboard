@@ -22,7 +22,7 @@ const DEFAULT_PAGES = [
   { label: "Supplier Detail Page", href: "/supplier-detail" },
   { label: "Mentors",         href: "/MentorsCMS" },
   { label: "Learning hub",         href: "/Learninghubcms" },
-  { label: "Community Feed",            href: "/CommunityFeedcms" },
+  { label: "Community Feed",            href: "/Communitycms" },
 
 ];
 
