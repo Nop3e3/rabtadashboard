@@ -2,7 +2,7 @@
 import React from "react";
 import Sidebar from "../Components/Sidebar/Sidebar";
 import "./style.css";
-import  Learninghubform from "../Components/Forms comp/Formpages/Learninghubcms";
+import  Mentorscms from "../Components/Forms comp/Formpages/Mentorscms";
 import Chips from "../Components/Chips/Chipcon";
 
 const Home = () => {
@@ -13,7 +13,7 @@ const Home = () => {
       <div className="maincon">
         <Chips/>
 
-    <Learninghubform/>
+    <Mentorscms/>
       </div>
     </div>
   );
