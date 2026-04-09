@@ -20,9 +20,9 @@ const DEFAULT_PAGES = [
   { label: "Home Screen",          href: "/AppContentHome" },
   { label: "Supplier Discovery",   href: "/supplier-discovery" },
   { label: "Supplier Detail Page", href: "/supplier-detail" },
-  { label: "Learning Hub",         href: "/learning-hub" },
-  { label: "Analytics",            href: "/analytics" },
-  { label: "Settings",             href: "/settings" },
+  { label: "Learning hub",         href: "/Learninghubcms" },
+  { label: "Community Feed",            href: "/CommunityFeedcms" },
+{ label: "Mentors",         href: "/Mentorcms" },
 ];
 
 export default function NavChipsContainer({ pages = DEFAULT_PAGES }) {
