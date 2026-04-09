@@ -7,10 +7,12 @@ import AppContentHome from "./Pages/AppContentHome";
 import MentorsCMS from "./Pages/MentorsCMS"
 import Learninghubcms from "./Pages/LearningHubcms"
 import Communitycms from "./Pages/Communitycms"
+import Suppliercontentpages from "./Pages/Suppliercontentpages"
 function App() {
   return (
     <Routes>
          <Route path="/supplier-detail" element={<Supplierdetail/>} />
+          <Route path="/Suppliercontentpages" element={<Suppliercontentpages/>} />
                   <Route path="/Communitycms" element={<Communitycms/>} />
       <Route path="/supplier-discovery" element={<Supplierdiscovery/>} />
        <Route path="/" element={<Home />} />
