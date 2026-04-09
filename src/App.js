@@ -8,10 +8,12 @@ import MentorsCMS from "./Pages/MentorsCMS"
 import Learninghubcms from "./Pages/LearningHubcms"
 import Learninghub from "./Pages/LearningHubDisplay";
 import Communitycms from "./Pages/Communitycms"
+import Community from "./Pages/CommunityFeedDisplay"
 import Suppliercontentpages from "./Pages/Suppliercontentpages"
 function App() {
   return (
     <Routes>
+          <Route path="/Community" element={<Community/>} />
          <Route path="/supplier-detail" element={<Supplierdetail/>} />
           <Route path="/Suppliercontentpages" element={<Suppliercontentpages/>} />
                   <Route path="/Communitycms" element={<Communitycms/>} />

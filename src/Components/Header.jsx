@@ -8,24 +8,28 @@ const AppContentHeader = ({
   buttonText,
   icon,
   onButtonClick,
-  path, // ✅ new prop
+  path,
   showButton = true,
 }) => {
   const navigate = useNavigate();
 
   const handleClick = () => {
     if (onButtonClick) {
-      onButtonClick(); // optional custom logic
+      onButtonClick();
     }
 
     if (path) {
-      navigate(path); // ✅ route navigation
+      navigate(path);
     }
   };
 
+  // ✅ Button should only render if it has content or behavior
+  const shouldRenderButton =
+    showButton && (buttonText || icon || path || onButtonClick);
+
   return (
     <div
-      className="flex"
+      className="flex justify-between items-center"
       style={{ fontFamily: "'Lexend Exa', sans-serif" }}
     >
       {/* Left Content */}
@@ -43,8 +47,8 @@ const AppContentHeader = ({
         )}
       </div>
 
-      {/* Right Content */}
-      {showButton && (
+      {/* Right Content (Button) */}
+      {shouldRenderButton && (
         <div className="mt-6 md:mt-0">
           <button className="save" onClick={handleClick}>
             {icon && <img src={icon} alt="icon" />}

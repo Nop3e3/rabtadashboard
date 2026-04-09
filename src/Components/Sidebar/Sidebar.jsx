@@ -30,7 +30,7 @@ const Sidebar = () => {
     { name: 'App Content', path: '/AppContentHome', icon: contentIcon },
     { name: 'Suppliers', path: '/Suppliercontentpages', icon: suppliersIcon },
     { name: 'Learning', path: '/Learninghub', icon: learningIcon },
-    { name: 'Community', path: '/community', icon: communityIcon },
+    { name: 'Community', path: '/Community', icon: communityIcon },
     { name: 'Users', path: '/users', icon: usersIcon },
     { name: 'Verification', path: '/verification', icon: verificationIcon },
     { name: 'Orders', path: '/orders', icon: ordersIcon },
