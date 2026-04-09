@@ -1,0 +1,31 @@
+.flex{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 93%;
+    margin-top: 20px;
+    justify-self: center;
+    align-items: center;
+}
+.txt{
+      display: flex;
+    flex-direction: column;
+}
+.save{
+    display: flex;
+padding: 12px 24px;
+align-items: center;
+gap: 16px;
+color: #FFF;
+
+text-align: center;
+font-family: "Lexend Exa";
+font-size: 16px;
+font-style: normal;
+font-weight: 500;
+line-height: 24px; /* 150% */
+border-radius: 32px;
+border: 1px solid #F5FFC1;
+
+background: linear-gradient(180deg, rgba(237, 254, 142, 0.60) 0%, rgba(86, 94, 36, 0.60) 100%)
+}

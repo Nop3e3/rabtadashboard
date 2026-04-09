@@ -1,6 +1,7 @@
 // src/pages/Home.jsx
 import React from "react";
-import Sidebar from "../Components/Sidebar/Sidebar";
+import Sidebar from "../Components/Sidebar/Sidebarcms";
+import HeaderSection from "../Components/Header";
 import "./style.css";
 import Communitycms from "../Components/Forms comp/Formpages/CommunityEditorPage"
 import Chips from "../Components/Chips/Chipcon";
@@ -11,6 +12,7 @@ const Home = () => {
       <Sidebar />
 
       <div className="maincon">
+        <HeaderSection/>
         <Chips/>
         <Communitycms/>
 
