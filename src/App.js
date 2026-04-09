@@ -6,6 +6,7 @@ import Supplierdetail from "./Pages/supplier-detail"
 import AppContentHome from "./Pages/AppContentHome";
 import MentorsCMS from "./Pages/MentorsCMS"
 import Learninghubcms from "./Pages/LearningHubcms"
+import Learninghub from "./Pages/LearningHubDisplay";
 import Communitycms from "./Pages/Communitycms"
 import Suppliercontentpages from "./Pages/Suppliercontentpages"
 function App() {
@@ -17,6 +18,7 @@ function App() {
       <Route path="/supplier-discovery" element={<Supplierdiscovery/>} />
        <Route path="/" element={<Home />} />
              <Route path="/Learninghubcms" element={<Learninghubcms/>} />
+                        <Route path="/Learninghub" element={<Learninghub/>} />
           <Route path="/MentorsCMS" element={<MentorsCMS/>} />
  <Route path="/AppContentHome" element={<AppContentHome/>} />
     </Routes>

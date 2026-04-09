@@ -29,7 +29,7 @@ const Sidebar = () => {
     { name: 'Dashboard', path: '/', icon: dashboardIcon },
     { name: 'App Content', path: '/AppContentHome', icon: contentIcon },
     { name: 'Suppliers', path: '/Suppliercontentpages', icon: suppliersIcon },
-    { name: 'Learning', path: '/learning', icon: learningIcon },
+    { name: 'Learning', path: '/Learninghub', icon: learningIcon },
     { name: 'Community', path: '/community', icon: communityIcon },
     { name: 'Users', path: '/users', icon: usersIcon },
     { name: 'Verification', path: '/verification', icon: verificationIcon },
