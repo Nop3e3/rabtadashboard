@@ -15,10 +15,11 @@ import Userscms from "./Pages/Usercms";
 import Verification from "./Pages/Verification";
 import Orders from "./Pages/Orders";
 import Reports from "./Pages/Report";
+import Notification from "./Pages/Notifications";
 function App() {
   return (
     <Routes>
-
+ <Route path="/Notification" element={<Notification/>} />
  <Route path="/Reports" element={<Reports/>} />
       <Route path="/Orders" element={<Orders/>} />
       <Route path="/Verification" element={<Verification/>} />
