@@ -12,10 +12,15 @@ import Community from "./Pages/CommunityFeedDisplay";
 import Suppliercontentpages from "./Pages/Suppliercontentpages";
 import Users from "./Pages/UsersDisplay";
 import Userscms from "./Pages/Usercms";
+import Verification from "./Pages/Verification";
+import Orders from "./Pages/Orders";
 function App() {
   return (
     <Routes>
-      
+
+
+      <Route path="/Orders" element={<Orders/>} />
+      <Route path="/Verification" element={<Verification/>} />
           <Route path="/Userscms" element={<Userscms/>} />
           <Route path="/Users" element={<Users/>} />
           <Route path="/Community" element={<Community/>} />
