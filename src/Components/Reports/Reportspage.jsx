@@ -57,10 +57,10 @@ const RADAR_AXES = [
 ];
 
 const HOURLY_DATA = [
-  { label: "00", value: 10 }, { label: "03", value: 8  },
-  { label: "06", value: 15 }, { label: "09", value: 45 },
-  { label: "12", value: 60 }, { label: "15", value: 85 },
-  { label: "18", value: 95 }, { label: "21", value: 70 },
+  { label: "00", value: 12 }, { label: "03", value: 8  },
+  { label: "06", value: 11 }, { label: "09", value: 42 },
+  { label: "12", value: 76 }, { label: "15", value: 64 },
+  { label: "18", value: 82 }, { label: "21", value: 58 },
 ];
 
 const SUPPLIERS = [
@@ -181,7 +181,7 @@ export default function ReportsPage() {
           <RadarChart axes={RADAR_AXES} color="#8ab040" />
         </div>
 
-        <div className="rp-chart-card">
+        <div className="rp-chart-card rp-chart-card--fill">
           <div className="rp-chart-card__hd">
             <span className="rp-chart-card__title">Hourly Activity</span>
           </div>
