@@ -14,11 +14,12 @@ import Users from "./Pages/UsersDisplay";
 import Userscms from "./Pages/Usercms";
 import Verification from "./Pages/Verification";
 import Orders from "./Pages/Orders";
+import Reports from "./Pages/Report";
 function App() {
   return (
     <Routes>
 
-
+ <Route path="/Reports" element={<Reports/>} />
       <Route path="/Orders" element={<Orders/>} />
       <Route path="/Verification" element={<Verification/>} />
           <Route path="/Userscms" element={<Userscms/>} />

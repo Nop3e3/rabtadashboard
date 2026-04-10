@@ -5,7 +5,7 @@ import "./style.css";
 import HeaderSection from "../Components/Header";
 import Dashboard from "../Components/Verification/Veripage";
 import Sidebar from "../Components/Sidebar/Sidebar";
-import OrdersPage from './../Components/Orders/Orderspage';
+import Reports from './../Components/Reports/Reportspage';
 const Orders = () => {
   return (
     <div className="homepage_bg">
@@ -13,7 +13,7 @@ const Orders = () => {
       <Sidebar/><div className="maincon">
 
       
-      <OrdersPage/></div>
+      <Reports/></div>
     </div>
   );
 };
