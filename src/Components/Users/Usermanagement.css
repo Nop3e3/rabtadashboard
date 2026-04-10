@@ -1,0 +1,419 @@
+/* UserManagement.css */
+
+/* ── Page ─────────────────────────────────────────────────────────────────── */
+.um-page {
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  width: 100%;
+  margin: 0 auto;
+}
+
+/* ── Stat Cards row ───────────────────────────────────────────────────────── */
+.um-stats-row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
+}
+
+.um-stats-row > * {
+  width: 100% !important;
+  min-width: 0 !important;
+}
+
+.um-stats-row > * > * {
+  width: 100% !important;
+  min-width: 0 !important;
+  box-sizing: border-box !important;
+}
+
+@media (max-width: 800px) {
+  .um-stats-row { grid-template-columns: repeat(2, 1fr); }
+}
+
+/* ── Role Badge ───────────────────────────────────────────────────────────── */
+.role-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.28rem 0.75rem;
+  border-radius: var(--r-p);
+  font-size: 11.5px;
+  font-weight: 600;
+  border: 1px solid var(--border-h);
+  color: var(--text);
+  background: transparent;
+  white-space: nowrap;
+}
+
+.role-badge--entrepreneur {
+  color: var(--text);
+  border-color: var(--border-h);
+}
+
+.role-badge--mentor {
+  color: #c8a96e;
+  border-color: rgba(150, 130, 70, 0.45);
+  background: rgba(100, 90, 60, 0.12);
+}
+
+.role-badge--supplier {
+  color: #7ecb9a;
+  border-color: rgba(74, 124, 89, 0.45);
+  background: rgba(74, 124, 89, 0.1);
+}
+
+/* ── Users Table ──────────────────────────────────────────────────────────── */
+.users-table {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  overflow: hidden;
+}
+
+.users-table__header {
+  display: grid;
+  grid-template-columns: 1.4fr 2fr 1.1fr 1fr 1.4fr 1.2fr;
+  padding: 0.8rem 1.25rem;
+  border-bottom: 1px solid var(--border);
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.users-table__th {
+  font-size: 11.5px;
+  font-weight: 600;
+  color: var(--text-2);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.users-table__empty {
+  padding: 2.5rem;
+  text-align: center;
+  color: var(--text-3);
+  font-size: 13px;
+}
+
+/* ── User Row ─────────────────────────────────────────────────────────────── */
+.user-row {
+  display: grid;
+  grid-template-columns: 1.4fr 2fr 1.1fr 1fr 1.4fr 1.2fr;
+  padding: 1rem 1.25rem;
+  border-bottom: 1px solid var(--border);
+  align-items: center;
+  transition: background var(--ease);
+}
+
+.user-row:last-child {
+  border-bottom: none;
+}
+
+.user-row:hover {
+  background: rgba(255, 255, 255, 0.025);
+}
+
+.user-row__name {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text);
+  line-height: 1.35;
+}
+
+.user-row__email {
+  font-size: 12.5px;
+  color: var(--text-2);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.user-row__date {
+  font-size: 12.5px;
+  color: var(--text-2);
+}
+
+.user-row__activity {
+  font-size: 12px;
+  color: var(--text-2);
+  line-height: 1.4;
+}
+
+.user-row__actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* ── Peer Session Row with Cancel ─────────────────────────────────────────── */
+.peer-row__cancel {
+  background: transparent;
+  border: 1px solid var(--border-h);
+  color: var(--text);
+  font-family: var(--font);
+  font-size: 12.5px;
+  font-weight: 600;
+  padding: 0.5rem 1.1rem;
+  border-radius: var(--r-p);
+  cursor: pointer;
+  transition: border-color var(--ease), background var(--ease);
+  flex-shrink: 0;
+}
+
+.peer-row__cancel:hover {
+  border-color: var(--red);
+  color: var(--red);
+}
+
+/* ── User Edit Modal ──────────────────────────────────────────────────────── */
+.ue-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 1rem;
+}
+
+.ue-modal {
+  background: var(--bg-card);
+  border: 1px solid var(--border-h);
+  border-radius: var(--r-xl);
+  width: 100%;
+  max-width: 500px;
+  max-height: 88vh;
+  display: flex;
+  flex-direction: column;
+  box-shadow: var(--sh-lg);
+}
+
+.ue-modal__hd {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  padding: 1.4rem 1.5rem 1.1rem;
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+}
+
+.ue-modal__title {
+  display: block;
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.ue-modal__sub {
+  display: block;
+  font-size: 12px;
+  color: var(--text-2);
+  margin-top: 2px;
+}
+
+.ue-modal__close {
+  background: none;
+  border: none;
+  color: var(--text-2);
+  font-size: 22px;
+  cursor: pointer;
+  line-height: 1;
+  padding: 0;
+  transition: color var(--ease);
+}
+
+.ue-modal__close:hover { color: var(--text); }
+
+.ue-modal__body {
+  overflow-y: auto;
+  padding: 1.25rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+  flex: 1;
+}
+
+.ue-modal__label {
+  display: block;
+  font-size: 11.5px;
+  font-weight: 500;
+  color: var(--text-2);
+  margin-bottom: 0.35rem;
+}
+
+.ue-modal__input {
+  width: 100%;
+  background: var(--bg-input);
+  border: 1px solid var(--border);
+  border-radius: var(--r-sm);
+  padding: 0.62rem 0.85rem;
+  font-family: var(--font);
+  font-size: 12.5px;
+  color: var(--text);
+  outline: none;
+  transition: border-color var(--ease);
+}
+
+.ue-modal__input:focus { border-color: var(--border-focus); }
+
+.ue-modal__select {
+  width: 100%;
+  background: var(--bg-input);
+  border: 1px solid var(--border);
+  border-radius: var(--r-sm);
+  padding: 0.62rem 0.85rem;
+  font-family: var(--font);
+  font-size: 12.5px;
+  color: var(--text);
+  outline: none;
+  cursor: pointer;
+  appearance: none;
+  transition: border-color var(--ease);
+}
+
+.ue-modal__select:focus { border-color: var(--border-focus); }
+
+.ue-modal__grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+}
+
+.ue-modal__section-title {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--text-2);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  padding-bottom: 0.4rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.ue-modal__error {
+  font-size: 12px;
+  color: var(--red);
+  padding: 0.5rem 0.75rem;
+  background: var(--red-bg);
+  border-radius: var(--r-sm);
+  border: 1px solid var(--red-ring);
+}
+
+.ue-modal__danger {
+  border: 1px solid rgba(220, 82, 68, 0.2);
+  border-radius: var(--r-sm);
+  padding: 1rem;
+  background: var(--red-bg);
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+}
+
+.ue-modal__danger-title {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--red);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.ue-modal__btn-delete {
+  background: transparent;
+  border: 1px solid var(--red);
+  color: var(--red);
+  font-family: var(--font);
+  font-size: 12.5px;
+  font-weight: 600;
+  padding: 0.5rem 1.1rem;
+  border-radius: var(--r-p);
+  cursor: pointer;
+  transition: background var(--ease), color var(--ease);
+  align-self: flex-start;
+}
+
+.ue-modal__btn-delete:hover { background: var(--red); color: #fff; }
+
+.ue-modal__confirm {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.ue-modal__confirm-text {
+  font-size: 12px;
+  color: var(--text-2);
+  line-height: 1.5;
+}
+
+.ue-modal__confirm-text strong { color: var(--text); }
+
+.ue-modal__confirm-btns {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.ue-modal__btn-cancel {
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--text-2);
+  font-family: var(--font);
+  font-size: 12.5px;
+  font-weight: 600;
+  padding: 0.55rem 1.2rem;
+  border-radius: var(--r-p);
+  cursor: pointer;
+  transition: border-color var(--ease), color var(--ease);
+}
+
+.ue-modal__btn-cancel:hover { border-color: var(--border-h); color: var(--text); }
+
+.ue-modal__btn-save {
+  background: var(--accent);
+  border: none;
+  color: #fff;
+  font-family: var(--font);
+  font-size: 12.5px;
+  font-weight: 700;
+  padding: 0.55rem 1.4rem;
+  border-radius: var(--r-p);
+  cursor: pointer;
+  transition: background var(--ease), opacity var(--ease);
+}
+
+.ue-modal__btn-save:hover { background: var(--accent-h); }
+.ue-modal__btn-save:disabled { opacity: 0.5; cursor: not-allowed; }
+
+.ue-modal__btn-delete-confirm {
+  background: var(--red);
+  border: none;
+  color: #fff;
+  font-family: var(--font);
+  font-size: 12px;
+  font-weight: 700;
+  padding: 0.45rem 1rem;
+  border-radius: var(--r-p);
+  cursor: pointer;
+  transition: opacity var(--ease);
+}
+
+.ue-modal__btn-delete-confirm:hover { opacity: 0.85; }
+.ue-modal__btn-delete-confirm:disabled { opacity: 0.5; cursor: not-allowed; }
+
+.ue-modal__ft {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.65rem;
+  padding: 1rem 1.5rem;
+  border-top: 1px solid var(--border);
+  flex-shrink: 0;
+}
+
+/* ── State messages ───────────────────────────────────────────────────────── */
+.um-state-msg {
+  color: var(--text-2);
+  font-size: 13px;
+  text-align: center;
+  padding: 3rem 0;
+}
+
+.um-state-msg--error { color: var(--red); }

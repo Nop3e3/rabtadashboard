@@ -1,0 +1,632 @@
+/* CreateUser.css */
+
+/* ── Page wrapper ─────────────────────────────────────────────────────────── */
+.cu-page {
+  min-height: 100vh;
+  width: 100%;
+  font-family: var(--font, 'Lexend Exa', sans-serif);
+  color: var(--text, #edede7);
+}
+
+/* ── Page Header ──────────────────────────────────────────────────────────── */
+.cu-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.1rem 1.5rem;
+  border-bottom: 1px solid var(--border, #222);
+  gap: 1rem;
+}
+
+.cu-header__left {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.cu-header__back {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  background: none;
+  border: none;
+  color: var(--text-2, #6e6e68);
+  font-family: var(--font);
+  font-size: 13px;
+  cursor: pointer;
+  transition: color var(--ease, 0.16s);
+  padding: 0;
+}
+
+.cu-header__back:hover { color: var(--text); }
+
+.cu-header__divider {
+  width: 1px;
+  height: 24px;
+  background: var(--border);
+}
+
+.cu-header__title {
+  font-size: 16px;
+  font-weight: 800;
+  color: var(--text);
+  display: block;
+}
+
+.cu-header__sub {
+  font-size: 12px;
+  color: var(--text-2);
+  display: block;
+  margin-top: 2px;
+}
+
+.cu-header__actions {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+}
+
+/* ── Buttons ──────────────────────────────────────────────────────────────── */
+.cu-btn-cancel {
+  background: transparent;
+  border: 1px solid var(--border-h, #2e2e2e);
+  color: var(--text-2);
+  font-family: var(--font);
+  font-size: 12.5px;
+  font-weight: 600;
+  padding: 0.55rem 1.2rem;
+  border-radius: var(--r-p, 999px);
+  cursor: pointer;
+  transition: border-color var(--ease), color var(--ease);
+}
+
+.cu-btn-cancel:hover { border-color: var(--text-2); color: var(--text); }
+
+.cu-btn-save {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  background: var(--accent, #7a9e3a);
+  border: none;
+  color: #fff;
+  font-family: var(--font);
+  font-size: 12.5px;
+  font-weight: 700;
+  padding: 0.55rem 1.3rem;
+  border-radius: var(--r-p);
+  cursor: pointer;
+  transition: background var(--ease), opacity var(--ease);
+}
+
+.cu-btn-save:hover { background: var(--accent-h, #8ab040); }
+.cu-btn-save:disabled { opacity: 0.5; cursor: not-allowed; }
+
+/* ── Tab Navigation — sliding pill, equal width ───────────────────────────── */
+.cu-tabs {
+  position: relative;
+  display: flex;
+  padding: 0.5rem;
+  border-bottom: 1px solid var(--border);
+  background: var(--bg-card, #111);
+  gap: 0;
+  border-radius: 21.215px;
+background: rgba(255, 255, 255, 0.02);
+margin-top: 30px
+;
+width: 97%;
+}
+
+/* The animated sliding pill that sits behind the active tab */
+.cu-tab-pill {
+  position: absolute;
+  top: 0.5rem;
+  bottom: 0.5rem;
+  background: var(--accent, #7a9e3a);
+  border-radius: var(--r-p, 999px);
+  transition: left 0.28s cubic-bezier(0.4, 0, 0.2, 1),
+              width 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Each tab fills equal width */
+.cu-tab {
+  position: relative;
+  z-index: 1;
+  flex: 1;                   /* ← equal width */
+  background: transparent;
+  border: none;
+  color: var(--text-2);
+  font-family: var(--font);
+  font-size: 12.5px;
+  font-weight: 600;
+  padding: 0.6rem 0.5rem;
+  border-radius: var(--r-p);
+  cursor: pointer;
+  transition: color 0.2s ease;
+  white-space: nowrap;
+  text-align: center;
+}
+
+.cu-tab:hover:not(.cu-tab--active) { color: var(--text); }
+
+/* Active tab text turns white — pill behind it provides the color */
+.cu-tab--active { color: #fff; }
+
+/* ── Tab content — padding so fixed bar doesn't cover content ─────────────── */
+.cu-tab-content {
+  padding-bottom: 5rem;
+}
+
+/* ── Fixed Bottom Save Bar ────────────────────────────────────────────────── */
+.cu-bottom-bar {
+ border-radius: 21.215px;
+background: rgba(255, 255, 255, 0.02);
+  display: flex;
+  align-items: center;
+  width: 97%;
+  justify-content: space-between;
+  padding: 0.9rem 1.5rem;
+  background: var(--bg-card);
+  border-top: 1px solid var(--border);
+
+  box-shadow: 0 -4px 24px rgba(0, 0, 0, 0.45);
+}
+
+.cu-bottom-bar__right {
+  display: flex;
+  gap: 0.65rem;
+  align-items: center;
+}
+
+/* ── Tab Content Grid ─────────────────────────────────────────────────────── */
+.cu-content {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.25rem;
+  padding: 1.5rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+@media (max-width: 800px) {
+  .cu-content { grid-template-columns: 1fr; }
+}
+
+/* ── Section Card ─────────────────────────────────────────────────────────── */
+.cu-card {
+  background: var(--bg-card, #111);
+  border: 1px solid var(--border, #222);
+  border-radius: var(--r-lg, 18px);
+  padding: 1.4rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.cu-card__title {
+  font-size: 13.5px;
+  font-weight: 800;
+  color: var(--text);
+}
+
+/* ── Form fields ──────────────────────────────────────────────────────────── */
+.cu-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.cu-field--row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+}
+
+.cu-label {
+  font-size: 11.5px;
+  font-weight: 500;
+  color: var(--text-2);
+}
+
+.cu-input {
+  width: 100%;
+  background: var(--bg-input, #0d0d0d);
+  border: 1px solid var(--border);
+  border-radius: var(--r-sm, 9px);
+  padding: 0.65rem 0.9rem;
+  font-family: var(--font);
+  font-size: 12.5px;
+  color: var(--text);
+  outline: none;
+  transition: border-color var(--ease);
+  box-sizing: border-box;
+}
+
+.cu-input:focus { border-color: var(--border-focus, #5c8020); }
+.cu-input--error { border-color: var(--red, #dc5244) !important; }
+
+.cu-input-error-msg {
+  font-size: 11px;
+  color: var(--red);
+  margin-top: 2px;
+}
+
+.cu-textarea {
+  width: 100%;
+  background: var(--bg-input);
+  border: 1px solid var(--border);
+  border-radius: var(--r-sm);
+  padding: 0.65rem 0.9rem;
+  font-family: var(--font);
+  font-size: 12.5px;
+  color: var(--text);
+  outline: none;
+  resize: vertical;
+  min-height: 80px;
+  transition: border-color var(--ease);
+  box-sizing: border-box;
+}
+
+.cu-textarea:focus { border-color: var(--border-focus); }
+
+.cu-select {
+  width: 100%;
+  background: var(--bg-input);
+  border: 1px solid var(--border);
+  border-radius: var(--r-sm);
+  padding: 0.65rem 0.9rem;
+  font-family: var(--font);
+  font-size: 12.5px;
+  color: var(--text);
+  outline: none;
+  cursor: pointer;
+  appearance: none;
+  transition: border-color var(--ease);
+}
+
+.cu-select:focus { border-color: var(--border-focus); }
+
+/* ── Profile Picture ──────────────────────────────────────────────────────── */
+.cu-pfp {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.cu-pfp__avatar {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  object-fit: cover;
+  background: var(--bg-input);
+  border: 2px solid var(--border);
+  flex-shrink: 0;
+}
+
+.cu-pfp__placeholder {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: var(--accent-dim, #2a3d10);
+  border: 2px solid var(--accent);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  font-weight: 800;
+  color: var(--accent);
+  flex-shrink: 0;
+}
+
+.cu-pfp__upload-btn {
+  background: none;
+  border: none;
+  color: var(--text-2);
+  font-family: var(--font);
+  font-size: 12px;
+  cursor: pointer;
+  text-align: left;
+  padding: 0;
+  line-height: 1.5;
+}
+
+.cu-pfp__hint {
+  font-size: 11px;
+  color: var(--text-3, #3a3a36);
+  display: block;
+}
+
+/* ── Toggle Switch ────────────────────────────────────────────────────────── */
+.cu-toggle-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.cu-toggle-label {
+  font-size: 12.5px;
+  color: var(--text);
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.cu-toggle-label-icon { font-size: 13px; }
+
+.cu-toggle {
+  position: relative;
+  width: 40px;
+  height: 22px;
+  flex-shrink: 0;
+}
+
+.cu-toggle input { opacity: 0; width: 0; height: 0; position: absolute; }
+
+.cu-toggle__track {
+  position: absolute;
+  inset: 0;
+  border-radius: 999px;
+  background: var(--border-h);
+  transition: background var(--ease);
+  cursor: pointer;
+}
+
+.cu-toggle__track::after {
+  content: "";
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: #fff;
+  top: 3px;
+  left: 3px;
+  transition: transform var(--ease);
+}
+
+.cu-toggle input:checked + .cu-toggle__track { background: var(--accent); }
+.cu-toggle input:checked + .cu-toggle__track::after { transform: translateX(18px); }
+
+/* ── Account Status Select ────────────────────────────────────────────────── */
+.cu-status-select {
+  width: 100%;
+  background: var(--bg-input);
+  border: 1px solid var(--border);
+  border-radius: var(--r-sm);
+  padding: 0.55rem 0.9rem;
+  font-family: var(--font);
+  font-size: 12.5px;
+  color: var(--text);
+  outline: none;
+  cursor: pointer;
+  appearance: none;
+}
+
+/* ── Account Info ─────────────────────────────────────────────────────────── */
+.cu-info-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+}
+
+.cu-info-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 12.5px;
+}
+
+.cu-info-row__key { color: var(--text-2); }
+.cu-info-row__val { color: var(--text); font-weight: 600; }
+
+/* ── Danger Zone ──────────────────────────────────────────────────────────── */
+.cu-danger {
+  border: 1px solid rgba(220, 82, 68, 0.25);
+  border-radius: var(--r-lg);
+  padding: 1.25rem 1.5rem;
+  background: rgba(26, 12, 10, 0.6);
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.cu-danger__title {
+  font-size: 13.5px;
+  font-weight: 800;
+  color: var(--text);
+}
+
+.cu-danger__btns {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.cu-btn-suspend {
+  background: transparent;
+  border: 1px solid var(--border-h);
+  color: var(--text);
+  font-family: var(--font);
+  font-size: 12.5px;
+  font-weight: 600;
+  padding: 0.6rem 1rem;
+  border-radius: var(--r-p);
+  cursor: pointer;
+  transition: border-color var(--ease);
+}
+
+.cu-btn-suspend:hover { border-color: var(--text-2); }
+
+.cu-btn-delete-account {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  background: #c0235c;
+  border: none;
+  color: #fff;
+  font-family: var(--font);
+  font-size: 12.5px;
+  font-weight: 700;
+  padding: 0.6rem 1rem;
+  border-radius: var(--r-p);
+  cursor: pointer;
+  transition: opacity var(--ease);
+}
+
+.cu-btn-delete-account:hover { opacity: 0.85; }
+
+.cu-danger__confirm {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  padding: 0.75rem;
+  background: rgba(220, 82, 68, 0.08);
+  border: 1px solid rgba(220, 82, 68, 0.2);
+  border-radius: var(--r-sm);
+}
+
+.cu-danger__confirm-text {
+  font-size: 12px;
+  color: var(--text-2);
+  line-height: 1.5;
+}
+
+.cu-danger__confirm-text strong { color: var(--text); }
+
+.cu-danger__confirm-btns {
+  display: flex;
+  gap: 0.5rem;
+}
+
+/* ── Activity Stats Cards ─────────────────────────────────────────────────── */
+.cu-stats-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+}
+
+.cu-stat-card {
+  background: var(--bg-elevated, #161616);
+  border: 1px solid var(--border);
+  border-radius: var(--r-md, 13px);
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.cu-stat-card__label {
+  font-size: 11.5px;
+  color: var(--text-2);
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.cu-stat-card__icon { font-size: 13px; }
+.cu-stat-card__val  { font-size: 22px; font-weight: 800; color: var(--text); }
+.cu-stat-card__sub  { font-size: 11px; color: var(--text-2); }
+
+/* ── Activity Feed ────────────────────────────────────────────────────────── */
+.cu-activity-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.cu-activity-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  padding: 0.75rem;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  border-radius: var(--r-sm);
+}
+
+.cu-activity-item__icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: #edfe8e40;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  flex-shrink: 0;
+}
+
+.cu-activity-item__text {
+  font-size: 12.5px;
+  color: var(--text);
+  line-height: 1.4;
+  flex: 1;
+}
+
+.cu-activity-item__time {
+  font-size: 11px;
+  color: var(--text-3);
+  flex-shrink: 0;
+}
+
+/* ── Access Control ───────────────────────────────────────────────────────── */
+.cu-access-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.cu-access-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.8rem 1rem;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  border-radius: var(--r-sm);
+  gap: 1rem;
+}
+
+.cu-access-item__name { font-size: 13px; font-weight: 600; color: var(--text); }
+.cu-access-item__desc { font-size: 11.5px; color: var(--text-2); margin-top: 2px; }
+
+/* ── Password section ─────────────────────────────────────────────────────── */
+.cu-btn-reset {
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-h);
+  color: var(--text);
+  font-family: var(--font);
+  font-size: 12.5px;
+  font-weight: 600;
+  padding: 0.65rem 1.2rem;
+  border-radius: var(--r-p);
+  cursor: pointer;
+  transition: border-color var(--ease), background var(--ease);
+  width: 100%;
+}
+
+.cu-btn-reset:hover {
+  border-color: var(--accent);
+  background: linear-gradient(180deg, rgba(237, 254, 142, 0.60) 0%, rgba(86, 94, 36, 0.60) 100%);
+}
+
+/* ── Toast ────────────────────────────────────────────────────────────────── */
+.cu-toast {
+  position: fixed;
+  bottom: 5rem;           /* sits above the fixed bottom bar */
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--accent);
+  color: #fff;
+  font-size: 13px;
+  font-weight: 600;
+  padding: 0.7rem 1.5rem;
+  border-radius: var(--r-p);
+  box-shadow: var(--sh-lg);
+  z-index: 9999;
+  white-space: nowrap;
+}
+
+.cu-toast--error { background: var(--red); }

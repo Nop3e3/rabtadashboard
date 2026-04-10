@@ -31,7 +31,7 @@ const Sidebar = () => {
     { name: 'Suppliers', path: '/Suppliercontentpages', icon: suppliersIcon },
     { name: 'Learning', path: '/Learninghub', icon: learningIcon },
     { name: 'Community', path: '/Community', icon: communityIcon },
-    { name: 'Users', path: '/users', icon: usersIcon },
+    { name: 'Users', path: '/Users', icon: usersIcon },
     { name: 'Verification', path: '/verification', icon: verificationIcon },
     { name: 'Orders', path: '/orders', icon: ordersIcon },
     { name: 'Reports', path: '/reports', icon: reportsIcon },
