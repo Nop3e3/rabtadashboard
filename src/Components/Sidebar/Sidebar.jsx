@@ -36,7 +36,7 @@ const Sidebar = () => {
     { name: 'Orders', path: '/Orders', icon: ordersIcon },
     { name: 'Reports', path: '/Reports', icon: reportsIcon },
     { name: 'Notifications', path: '/Notification', icon: notificationsIcon },
-    { name: 'Support', path: '/support', icon: supportIcon },
+    { name: 'Support', path: '/Support', icon: supportIcon },
     { name: 'Settings', path: '/settings', icon: settingsIcon },
   ];
 

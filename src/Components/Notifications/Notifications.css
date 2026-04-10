@@ -74,7 +74,7 @@ width: 100%;
   width: 36px;
   height: 36px;
   border-radius: var(--r-sm);
-  background: var(--accent-dim);
+  background: #ffffff15;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -248,7 +248,7 @@ width: 100%;
 
 .notif-setting-row:last-child { border-bottom: none; }
 
-.notif-setting-row__info {}
+
 .notif-setting-row__name { font-size: 13.5px; font-weight: 700; color: var(--text); }
 .notif-setting-row__desc { font-size: 12px; color: var(--text-2); margin-top: 2px; }
 
