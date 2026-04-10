@@ -15,6 +15,7 @@ import Userscms from "./Pages/Usercms";
 import Verification from "./Pages/Verification";
 import Orders from "./Pages/Orders";
 import Reports from "./Pages/Report";
+import Settings from "./Pages/Settings";
 import Support from "./Pages/Support";
 import Notification from "./Pages/Notifications";
 function App() {
@@ -23,6 +24,9 @@ function App() {
  <Route path="/Notification" element={<Notification/>} />
  <Route path="/Reports" element={<Reports/>} />
   <Route path="/Support" element={<Support/>} />
+  
+  <Route path="/Settings" element={<Settings/>} />
+
       <Route path="/Orders" element={<Orders/>} />
       <Route path="/Verification" element={<Verification/>} />
           <Route path="/Userscms" element={<Userscms/>} />

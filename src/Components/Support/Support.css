@@ -51,7 +51,7 @@
 .sup-stat-card__icon {
   width: 34px; height: 34px;
   border-radius: var(--r-sm);
-  background: var(--accent-dim);
+  background: #ffffff18;
   color: var(--accent);
   display: flex; align-items: center; justify-content: center;
   flex-shrink: 0;

@@ -37,7 +37,7 @@ const Sidebar = () => {
     { name: 'Reports', path: '/Reports', icon: reportsIcon },
     { name: 'Notifications', path: '/Notification', icon: notificationsIcon },
     { name: 'Support', path: '/Support', icon: supportIcon },
-    { name: 'Settings', path: '/settings', icon: settingsIcon },
+    { name: 'Settings', path: '/Settings', icon: settingsIcon },
   ];
 
   return (
